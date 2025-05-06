@@ -55,9 +55,6 @@ model User {
   phone               String?              @unique
   passwordHash        String?
   enabled             Boolean
-  facebookOauth       Boolean
-  facebookId          String?
-  appleOauth          Boolean
   avatar              String?
   confirmationCode    Int
   isCodeUsed          Boolean

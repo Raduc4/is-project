@@ -22,7 +22,7 @@ export class EventRepository {
 
     const imageUrls = await Promise.all(imageUploadPromises);
 
-    const newEvent = await this.prismaService.event.create({
+    const newEvent = await this.prismaService.ticket.create({
       data: {
         title: event.title,
         price: event.price,
@@ -32,11 +32,8 @@ export class EventRepository {
         savedByUsers: { create: [] },
         authorId: event.authorId,
         hourFrom: event.hourFrom,
-        howToSell: event.howToSell,
         hourTo: event.hourTo,
         days: event.days,
-        slotsSplit: event.slotsSplit,
-        offerType: event.offerType,
       },
     });
 

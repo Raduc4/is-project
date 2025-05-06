@@ -6,7 +6,6 @@ export class RegisterDto {
   username?: string;
   phone: string;
   base64: string;
-  type: string;
   userType: UserRole;
   tags: string[];
   category: string;
@@ -21,6 +20,6 @@ export class RegisterDto {
 
 export class LoginDto {
   email: string;
-  role: 'USER' | 'BUSINESS';
+  role: 'USER' | 'ADMIN';
   password: string;
 }

@@ -5,9 +5,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { JwtService } from '@nestjs/jwt';
 import { CodeModule } from './code/code.module';
-import { PostsModule } from './events/events.module';
+import { PostsModule } from './tickets/tickets.module';
 import { S3Module } from './s3/s3.module';
 import { PaymentsModule } from './payments/payments.module';
+import { PizdetController } from './pizdet/pizdet.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { PaymentsModule } from './payments/payments.module';
     S3Module,
     PaymentsModule,
   ],
-  controllers: [],
+  controllers: [PizdetController],
   providers: [JwtService],
 })
 export class AppModule {}

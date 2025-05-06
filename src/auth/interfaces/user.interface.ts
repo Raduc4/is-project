@@ -2,7 +2,6 @@ import { UserRole } from '@prisma/client';
 
 export interface IUser {
   _id?: string;
-  username: string;
   email: string;
   passwordHash?: string;
   phone: string;

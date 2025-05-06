@@ -17,31 +17,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(JWTAuthGuard)
-  @Get('/search')
-  async findUsersByUsername(
-    @UserId() id: string,
-    @Query() { username }: { username: string },
-  ) {
-    if (username.length === 0) return [];
-    return this.userService.findUsersByUsername(username, id);
-  }
-  @Get('/check')
-  async isUsernameAvailble(@Query() { username }: { username: string }) {
-    if (username.length === 0) return [];
-    return this.userService.checkUsername(username);
-  }
-  @Get('/checkEmail')
-  async isEmailAvailble(@Query() { email }: { email: string }) {
-    if (email.length === 0) return [];
-    console.log('Email', email);
-    return this.userService.checkEmail(email);
-  }
-
-  @Get('/verifyFacebookEmail')
-  async verifyFbEmail(@Query() email) {
-    return this.userService.findFacebookUser(email);
-  }
-  @UseGuards(JWTAuthGuard)
   @Get('/profile')
   async get_my_profile(@UserId() id) {
     return this.userService.findUser(id);
@@ -50,14 +25,6 @@ export class UserController {
   @Get()
   async get_all_profiles() {
     return this.userService.findMany();
-  }
-
-  @Post('/saveEvent')
-  async addSavedEvent(
-    @Body() { userId, eventId }: { userId: string; eventId: string },
-  ) {
-    console.log(userId, eventId);
-    return this.userService.addSavedEvent(userId, eventId);
   }
 
   @Get('/mySavedEvents')
@@ -143,58 +110,5 @@ export class UserController {
     @Body() { businessInfo }: { userId: string; businessInfo: BusinessInfoDto },
   ) {
     return this.userService.bulkBusinessInformationUpdate(id, businessInfo);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Get('/friends')
-  async getFriends(@UserId() id: string) {
-    return this.userService.getFriends(id);
-  }
-  @UseGuards(JWTAuthGuard)
-  @Get('/friends/pendingRequests')
-  async getPendingFriendship(@UserId() id: string) {
-    return this.userService.getMyPendingFriendshipRequests(id);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Get('/friends/pendingSentRequests')
-  async getPendingSentFriendship(@UserId() id: string) {
-    return this.userService.getMyRequestedPendingFriendships(id);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Post('/friends/follow')
-  async createFriendshipRequest(
-    @UserId() id: string,
-    @Query() { friendId }: { friendId: string },
-  ) {
-    return this.userService.toggleCreateFriendshipRequest(id, friendId);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Post('/friends/accept')
-  async acceptFriendshipRequest(
-    @UserId() id: string,
-    @Query() { friendId }: { friendId: string },
-  ) {
-    return this.userService.acceptFriendship(id, friendId);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Post('/friends/deny')
-  async denyFriendshipRequest(
-    @UserId() id: string,
-    @Query() { friendId }: { friendId: string },
-  ) {
-    return this.userService.denyFriendship(id, friendId);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Post('/friends/unfriend')
-  async unfriend(
-    @UserId() id: string,
-    @Query() { friendId }: { friendId: string },
-  ) {
-    return this.userService.unfriend(id, friendId);
   }
 }

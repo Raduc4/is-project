@@ -12,21 +12,21 @@ export class EventsService {
   ) {}
 
   async findEvent(id: string) {
-    return await this.prismaService.event.findUnique({ where: { id } });
+    return await this.prismaService.ticket.findUnique({ where: { id } });
   }
   async searchEvents(title: string) {
-    return this.prismaService.event.findMany({
+    return this.prismaService.ticket.findMany({
       where: { title: { contains: title, mode: 'insensitive' } },
       take: 10,
     });
   }
 
   async deleteEvent(id: string) {
-    return await this.prismaService.event.delete({ where: { id } });
+    return await this.prismaService.ticket.delete({ where: { id } });
   }
 
   async getAllEvents() {
-    return await this.prismaService.event.findMany({ take: 10 });
+    return await this.prismaService.ticket.findMany({ take: 10 });
   }
 
   async bookEvent(eventId: string, userId: string) {}

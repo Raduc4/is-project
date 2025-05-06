@@ -12,19 +12,19 @@ export class UserRepository {
     private readonly jwtService: JwtService,
   ) {}
   public async createUser(user: UserEntity) {
+    console.log('Creating user', user);
     const newUser = this.prismaService.user.create({
       data: {
         email: user.email,
         phone: user.phone,
         enabled: false,
-        username: user.username,
         passwordHash: user.passwordHash,
         isCodeUsed: false,
         confirmationCode: Math.floor(Math.random() * 10000),
         facebookOauth: false,
         appleOauth: false,
         avatar: '',
-        savedEvents: {},
+        savedTickets: {},
         role: user.role,
         businessName: user.businessName,
         businessAddress: user.businessAddress,
@@ -39,7 +39,6 @@ export class UserRepository {
   }
 
   public async updatePassword(user: UserEntity) {
-    console.log('User entity', user);
     const updatedUser = this.prismaService.user.update({
       where: { email: user.email, phone: user.phone },
       data: { passwordHash: user.passwordHash },
@@ -54,7 +53,7 @@ export class UserRepository {
   //   });
   // }
 
-  async getTokens(userId: string, role: 'USER' | 'BUSINESS') {
+  async getTokens(userId: string, role: 'USER' | 'ADMIN') {
     const jwtPayload: IJwtPayload = {
       id: userId,
       role,

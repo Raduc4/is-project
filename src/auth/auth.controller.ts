@@ -22,26 +22,13 @@ export class AuthController {
 
   @Post('/register')
   async register(@Body() user: RegisterDto) {
+    console.log('', user);
     return await this.authService.register(user);
   }
 
   @Post('/verifyJwtAws')
   async verifyAwsJwt(@Query() { jwt }: { jwt: string }) {
     return await this.authService.verifyAwsJwt(jwt);
-  }
-
-  @Post('/fbLogin')
-  async fbLogin(@Query() { jwt }: { jwt: string }) {
-    return await this.authService.facebookLogin(jwt);
-  }
-
-  @Post('/fbRegister')
-  async fbRegister(
-    @Query() { jwt }: { jwt: string },
-    @Body()
-    user: RegisterDto,
-  ) {
-    return await this.authService.userFacebookRegister(jwt, user);
   }
 
   @Post('/login')

@@ -9,13 +9,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { EventsService } from './events.service';
+import { EventsService } from './tickets.service';
 import { CreateEventDto } from './dtos/createEventDto';
 import { JWTAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/user/decorators/userId.decorator';
 
 @Controller('events')
-export class PostsController {
+export class TicketsController {
   constructor(private readonly eventsService: EventsService) {}
   @Get('/search')
   searchEvents(@Query('title') title: string) {
@@ -52,6 +52,7 @@ export class PostsController {
     return this.eventsService.bookEvent(eventId, userId);
   }
 
+  @UseGuards(JWTAuthGuard)
   @Put('/:id')
   updateEvent(@Param() id: string, @Body() updatePostDto: any[]) {}
 }

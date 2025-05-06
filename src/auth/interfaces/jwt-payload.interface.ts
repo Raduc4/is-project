@@ -1,6 +1,6 @@
 export interface IJwtPayload {
   id: string;
-  role: 'USER' | 'BUSINESS';
+  role: 'USER' | 'ADMIN';
 }
 
 export interface Tokens {
