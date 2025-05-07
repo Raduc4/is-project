@@ -76,28 +76,19 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userRepository.findUserByEmail(email);
+    console.log('User', user);
     if (!user) throw new Error('This user does not exist');
 
     const userEntity = new UserEntity(user);
     const isCorrectPass = await userEntity.validatePassword(password);
+    console.log('Is correct pass', isCorrectPass);
     if (!isCorrectPass) throw new Error('Incorrect email or password');
-    if (user.role === 'USER') {
-      return {
-        id: user.id,
-        phoneNumber: user.phone,
-        avatar: user.avatar,
-        email: user.email,
-        role: user.role,
-      };
-    } else {
-      return {
-        id: user.id,
-        phoneNumber: user.phone,
-        avatar: user.avatar,
-        email: user.email,
-        role: user.role,
-      };
-    }
+    return {
+      id: user.id,
+      phoneNumber: user.phone,
+      email: user.email,
+      role: user.role,
+    };
   }
 
   async refreshTokens(userId: string): Promise<Tokens> {

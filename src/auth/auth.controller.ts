@@ -15,6 +15,7 @@ import { RtGuard } from './guards/jwtrt.guard';
 import { Tokens } from './interfaces/jwt-payload.interface';
 import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { GetCurrentUser } from 'src/user/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -32,14 +33,10 @@ export class AuthController {
   }
 
   @Post('/login')
-  async login(@Body() { email, password, role }: LoginDto) {
+  async login(@Body() { email, password }: LoginDto) {
     console.log('login');
     const response = await this.authService.validateUser(email, password);
     if (!response) throw new Error('Invalid credentials');
-    if (response.role !== role)
-      throw new Error(
-        'User is registered as a ' + response.role + ' not a ' + role,
-      );
     const tokens = await this.authService.login(response.id, response.role);
 
     return { ...response, tokens };
