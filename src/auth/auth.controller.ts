@@ -45,10 +45,10 @@ export class AuthController {
     return { ...response, tokens };
   }
 
-  @Get('/forgotPassword')
-  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    return await this.authService.forgotPassword(forgotPasswordDto);
-  }
+  // @Get('/forgotPassword')
+  // async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+  //   return await this.authService.forgotPassword(forgotPasswordDto);
+  // }
 
   @Post('/forgotPassword')
   async forgotPasswordSet(
@@ -71,7 +71,6 @@ export class AuthController {
     return this.authService.resetPassword(resetPasswordDto);
   }
 
-  // @Public()
   @UseGuards(RtGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)

@@ -12,7 +12,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RegisterDto } from './dto/auth.dto';
 import { Tokens } from './interfaces/jwt-payload.interface';
 import { ForgotPasswordDto } from './dto/forgotPassword.dto';
-import { CodeService } from 'src/code/code.service';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { ImagesService } from 'src/s3/s3.service';
@@ -23,7 +22,7 @@ export class AuthService {
     readonly configService: ConfigService,
     readonly userService: UserService,
     readonly prismaService: PrismaService,
-    private readonly codeService: CodeService,
+    // private readonly codeService: CodeService,
     private readonly userRepository: UserRepository,
     private readonly s3Service: ImagesService,
   ) {}
@@ -44,119 +43,40 @@ export class AuthService {
     }
   }
 
-  async facebookLogin(jwt: string) {
-    const verified = await this.verifyAwsJwt(jwt);
-
-    if (verified) {
-      const fbid = verified.client_id;
-      const user = await this.prismaService.user.findFirst({
-        where: { facebookId: fbid },
-      });
-
-      if (user === null) {
-        return {
-          fbid,
-          registered: false,
-        };
-      } else {
-        const tokens = await this.userRepository.getTokens(user.id, user.role);
-
-        return {
-          id: user.id,
-          email: user.email,
-          phone: user.phone ?? undefined,
-          tokens,
-          userId: user.id,
-          enabled: user.enabled,
-          avatar: user.avatar,
-        };
-      }
-    }
-  }
-
   async register(user: RegisterDto) {
     const oldUser = await this.userRepository.findUserByEmail(user.email);
     console.log('Old user', user);
-    // if (oldUser)
-    //   throw new BadRequestException('User registered already', {
-    //     cause: new Error(),
-    //     description: 'User is registered already with this email',
-    //   });
-    // const phoneNumber = phone[0] === '+' ? phone.slice(1) : phone;
-    // console.log('Phone number', userType);
-    // let newUserEntity: UserEntity;
-    // if (userType === 'USER') {
-    //   newUserEntity = await new UserEntity({
-    //     email: email.trim(),
-    //     passwordHash: '',
-    //     avatar: '',
-    //     phone: phoneNumber,
-    //     role: userType,
-    //   }).setPassword(password);
-    // } else {
-    //   const {
-    //     businessAddress = '',
-    //     businessName = '',
-    //     businessPhone = '',
-    //     businessPostCode = '',
-    //   } = businessInfo || {};
+    if (oldUser)
+      throw new BadRequestException('User registered already', {
+        cause: new Error(),
+        description: 'User is registered already with this email',
+      });
+    const phoneNumber =
+      user.phone[0] === '+' ? user.phone.slice(1) : user.phone;
+    console.log('Phone number', user.userType);
+    let newUserEntity = await new UserEntity({
+      email: user.email.trim(),
+      passwordHash: '',
+      phone: phoneNumber,
+      role: user.userType,
+    }).setPassword(user.password);
 
-    //   newUserEntity = await new UserEntity({
-    //     email: email.trim(),
-    //     passwordHash: '',
-    //     avatar: '',
-    //     phone: phoneNumber,
-    //     role: userType,
-    //     businessAddress,
-    //     businessName,
-    //     businessPhone,
-    //     businessPostCode,
-    //     businessDescription,
-    //     businessTags: tags,
-    //     businessCategory: category,
-    //   }).setPassword(password);
-    // }
+    const newUser = await this.userRepository.createUser(newUserEntity);
 
-    // const newUser = await this.userRepository.createUser(newUserEntity);
-    // const response = await this.prismaService.user.update({
-    //   where: { id: newUser.id },
-    //   data: undefined,
-    // });
-    // const tokens = await this.userRepository.getTokens(
-    //   newUser.id,
-    //   newUser.role,
-    // );
+    const tokens = await this.userRepository.getTokens(
+      newUser.id,
+      newUser.role,
+    );
 
-    // return {
-    //   id: response.id,
-    //   email: response.email,
-    //   phone: response.phone,
-    //   tokens,
-    //   avatar: response.avatar,
-    //   phoneNumber: response.phone,
-    //   userId: response.id,
-    //   isEnabled: response.enabled,
-    //   businessInfo: {
-    //     businessAddress: response.businessAddress,
-    //     businessName: response.businessName,
-    //     businessPostCode: response.businessPostCode,
-    //     businessPhone: response.businessPhone,
-    //   },
-    //   businessDescription: response.businessDescription,
-    //   businessTags: response.businessTags,
-    //   businessCategory: response.businessCategory,
-    // };
+    return {
+      ...newUser,
+      tokens,
+    };
   }
 
   async validateUser(email: string, password: string) {
     const user = await this.userRepository.findUserByEmail(email);
     if (!user) throw new Error('This user does not exist');
-
-    if (user.facebookOauth && !user.passwordHash)
-      throw new BadRequestException('Facebook check', {
-        cause: new Error(),
-        description: 'User is registered with facebook',
-      });
 
     const userEntity = new UserEntity(user);
     const isCorrectPass = await userEntity.validatePassword(password);
@@ -164,28 +84,18 @@ export class AuthService {
     if (user.role === 'USER') {
       return {
         id: user.id,
-        isEnabled: user.enabled,
         phoneNumber: user.phone,
         avatar: user.avatar,
         email: user.email,
         role: user.role,
       };
     } else {
-      console.log('User', user);
       return {
         id: user.id,
-        isEnabled: user.enabled,
         phoneNumber: user.phone,
         avatar: user.avatar,
         email: user.email,
         role: user.role,
-        businessName: user.businessName,
-        businessAddress: user.businessAddress,
-        businessPhone: user.businessPhone,
-        businessPostCode: user.businessPostCode,
-        businessDescription: user.businessDescription,
-        businessCategory: user.businessCategory,
-        businessTags: user.businessTags,
       };
     }
   }
@@ -196,10 +106,7 @@ export class AuthService {
       throw new HttpException('This user does not exist', HttpStatus.FORBIDDEN);
 
     const tokens = await this.userRepository.getTokens(user.id, user.role);
-    // const userEntity = await new UserEntity(user).updateRtHash(
-    //   tokens.refresh_token,
-    // );
-    // this.userRepository.updateRtHash(userEntity);
+
     return tokens;
   }
 
@@ -208,19 +115,19 @@ export class AuthService {
     return this.userRepository.getTokens(id, role);
   }
 
-  async forgotPassword({ phone }: ForgotPasswordDto) {
-    let phoneNumber: string;
-    if (phone[0] === '+') {
-      phoneNumber = phone.slice(1).trim();
-    }
-    const user = await this.userRepository.findOneByPhone(phoneNumber);
-    if (!user)
-      throw new BadRequestException('User not found', {
-        cause: new Error(),
-        description: 'Some error description',
-      });
-    await this.codeService.getCode(phoneNumber);
-  }
+  // async forgotPassword({ phone }: ForgotPasswordDto) {
+  //   let phoneNumber: string;
+  //   if (phone[0] === '+') {
+  //     phoneNumber = phone.slice(1).trim();
+  //   }
+  //   const user = await this.userRepository.findOneByPhone(phoneNumber);
+  //   if (!user)
+  //     throw new BadRequestException('User not found', {
+  //       cause: new Error(),
+  //       description: 'Some error description',
+  //     });
+  //   await this.codeService.getCode(phoneNumber);
+  // }
 
   async forgotSetPassword(phone: string, code: string, password: string) {
     console.log('Forgot phone ', phone);

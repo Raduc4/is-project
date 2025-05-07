@@ -8,15 +8,7 @@ export class UserEntity implements IUser {
   email: string;
   passwordHash: string;
   rtHash: string;
-  avatar: string;
   role: UserRole;
-  businessName?: string;
-  businessAddress?: string;
-  businessPhone?: string;
-  businessPostCode?: string;
-  businessDescription?: string;
-  businessCategory?: string;
-  businessTags: string[];
 
   constructor(user: IUser) {
     this._id = user._id;
@@ -24,15 +16,6 @@ export class UserEntity implements IUser {
     this.email = user.email;
     this.role = user.role;
     this.phone = user.phone;
-    this.avatar = user.avatar;
-    this.businessAddress = user.businessAddress;
-    this.businessCategory = user.businessCategory;
-    this.businessName = user.businessName;
-    this.businessPhone = user.businessPhone;
-    this.businessPostCode = user.businessPostCode;
-    this.businessTags = user.businessTags;
-    this.businessDescription = user.businessDescription;
-    this.businessCategory = user.businessCategory;
   }
 
   public async setPassword(password: string) {

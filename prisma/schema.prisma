@@ -26,8 +26,8 @@ model Payments {
 }
 
 model Ticket {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime  @default(now())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
   title       String
   price       Float
   location    String
@@ -36,7 +36,6 @@ model Ticket {
   hourFrom    String
   hourTo      String
   days        String[]
-
 
   bookedByUsers   User[]   @relation("bookedEvents", fields: [bookedByUserIds], references: [id])
   bookedByUserIds String[] @db.ObjectId
@@ -49,32 +48,21 @@ model Ticket {
 }
 
 model User {
-  id                  String               @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt           DateTime             @default(now())
-  email               String               @unique
-  phone               String?              @unique
-  passwordHash        String?
-  enabled             Boolean
-  avatar              String?
-  confirmationCode    Int
-  isCodeUsed          Boolean
-  tickets              Ticket[]            @relation("tickets")
-  eventIDs            String[]             @db.ObjectId
-  savedTickets       Ticket[]              @relation("save", fields: [eventIDs], references: [id])
-  role                UserRole
-  payments            Payments[]
-  businessDescription String?
-  businessName        String?
-  businessAddress     String?
-  businessPhone       String?
-  businessEmail       String?
-  businessPostCode    String?
-  businessCategory    String?
-  businessTags        String[]
-  bookedIDs           String[]             @db.ObjectId
-  bookedTickets        Ticket[]              @relation("bookedEvents", fields: [bookedIDs], references: [id])
+  id               String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt        DateTime   @default(now())
+  email            String     @unique
+  phone            String?    @unique
+  passwordHash     String?
+  avatar           String?
+  confirmationCode Int
+  tickets          Ticket[]   @relation("tickets")
+  eventIDs         String[]   @db.ObjectId
+  savedTickets     Ticket[]   @relation("save", fields: [eventIDs], references: [id])
+  role             UserRole
+  payments         Payments[]
+  bookedIDs        String[]   @db.ObjectId
+  bookedTickets    Ticket[]   @relation("bookedEvents", fields: [bookedIDs], references: [id])
 }
-
 
 enum UserRole {
   USER

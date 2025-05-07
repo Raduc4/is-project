@@ -8,7 +8,6 @@ import { UserModule } from 'src/user/user.module';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RtStrategy } from './strategies/refreshtToken.strategy';
-import { CodeService } from 'src/code/code.service';
 import { ImagesService } from 'src/s3/s3.service';
 
 @Module({
@@ -25,7 +24,6 @@ import { ImagesService } from 'src/s3/s3.service';
     UserRepository,
     JwtStrategy,
     RtStrategy,
-    CodeService,
   ],
 })
 export class AuthModule {}

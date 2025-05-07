@@ -17,22 +17,10 @@ export class UserRepository {
       data: {
         email: user.email,
         phone: user.phone,
-        enabled: false,
         passwordHash: user.passwordHash,
-        isCodeUsed: false,
         confirmationCode: Math.floor(Math.random() * 10000),
-        facebookOauth: false,
-        appleOauth: false,
-        avatar: '',
         savedTickets: {},
         role: user.role,
-        businessName: user.businessName,
-        businessAddress: user.businessAddress,
-        businessPhone: user.businessPhone,
-        businessPostCode: user.businessPostCode,
-        businessDescription: user.businessDescription,
-        businessCategory: user.businessCategory,
-        businessTags: user.businessTags,
       },
     });
     return newUser;
@@ -45,13 +33,6 @@ export class UserRepository {
     });
     return updatedUser;
   }
-
-  // async updateRtHash(user: UserEntity) {
-  //   this.prismaService.user.update({
-  //     where: { id: user._id },
-  //     data: { rtHash: user.rtHash },
-  //   });
-  // }
 
   async getTokens(userId: string, role: 'USER' | 'ADMIN') {
     const jwtPayload: IJwtPayload = {
