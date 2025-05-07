@@ -1,37 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateEventDto } from './dtos/createEventDto';
-import { EventRepository } from './repository/event.repository';
+import { TicketsRepository } from './repository/tickets.repository';
 import { EventEntity } from './entities/event.entity';
 
 @Injectable()
-export class EventsService {
+export class TicketsService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly eventRepository: EventRepository,
+    private readonly ticketRepository: TicketsRepository,
   ) {}
 
-  async findEvent(id: string) {
+  async findTicket(id: string) {
     return await this.prismaService.ticket.findUnique({ where: { id } });
   }
-  async searchEvents(title: string) {
+  async searchTicket(title: string) {
     return this.prismaService.ticket.findMany({
       where: { title: { contains: title, mode: 'insensitive' } },
       take: 10,
     });
   }
 
-  async deleteEvent(id: string) {
+  async deleteTicket(id: string) {
     return await this.prismaService.ticket.delete({ where: { id } });
   }
 
-  async getAllEvents() {
+  async getAllTickets() {
     return await this.prismaService.ticket.findMany({ take: 10 });
   }
 
-  async bookEvent(eventId: string, userId: string) {}
+  async bookTicket(eventId: string, userId: string) {}
 
-  async createEvent(event: CreateEventDto, authorId: string) {
+  async createTicket(event: CreateEventDto, authorId: string) {
     const newEventEntity = new EventEntity({
       title: 'Test',
       price: 10,
@@ -46,6 +46,6 @@ export class EventsService {
       offerType: event.offerType,
       slotsSplit: event.slotsSplit,
     });
-    return await this.eventRepository.createEvent(newEventEntity);
+    return await this.ticketRepository.createTicket(newEventEntity);
   }
 }

@@ -4,13 +4,13 @@ import { EventEntity } from '../entities/event.entity';
 import { ImagesService } from 'src/s3/s3.service';
 import { randomUUID } from 'crypto';
 @Injectable()
-export class EventRepository {
+export class TicketsRepository {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly s3Service: ImagesService,
   ) {}
 
-  async createEvent(event: EventEntity) {
+  async createTicket(event: EventEntity) {
     const imageUploadPromises = event.images.map(async (image) => {
       const imageObject = await this.s3Service.uploadFile(
         image.base64,

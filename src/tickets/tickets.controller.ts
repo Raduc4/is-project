@@ -9,47 +9,47 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { EventsService } from './tickets.service';
+import { TicketsService } from './tickets.service';
 import { CreateEventDto } from './dtos/createEventDto';
 import { JWTAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/user/decorators/userId.decorator';
 
 @Controller('events')
 export class TicketsController {
-  constructor(private readonly eventsService: EventsService) {}
+  constructor(private readonly ticketsService: TicketsService) {}
   @Get('/search')
-  searchEvents(@Query('title') title: string) {
+  searchTickets(@Query('title') title: string) {
     if (title.length === 0) return [];
-    return this.eventsService.searchEvents(title);
+    return this.ticketsService.searchTicket(title);
   }
 
   @Get('/:id')
-  getEvent(@Param() { id }: { id: string }) {
-    return this.eventsService.findEvent(id);
+  getTicket(@Param() { id }: { id: string }) {
+    return this.ticketsService.findTicket(id);
   }
 
   @Delete('/:id')
-  deleteEvent(@Param() id: string) {
-    return this.eventsService.deleteEvent(id);
+  deleteTicket(@Param() id: string) {
+    return this.ticketsService.deleteTicket(id);
   }
 
   @Get()
-  getEvents() {
-    return this.eventsService.getAllEvents();
+  getTickets() {
+    return this.ticketsService.getAllTickets();
   }
 
   @UseGuards(JWTAuthGuard)
   @Post()
-  createEvent(@Body() createEventDto: CreateEventDto, @UserId() id: string) {
-    return this.eventsService.createEvent(createEventDto, id);
+  createTicket(@Body() createEventDto: CreateEventDto, @UserId() id: string) {
+    return this.ticketsService.createTicket(createEventDto, id);
   }
 
   @UseGuards(JWTAuthGuard)
   @Post('/bookEvent')
-  async bookEvent(
+  async bookTicket(
     @Body() { eventId, userId }: { eventId: string; userId: string },
   ) {
-    return this.eventsService.bookEvent(eventId, userId);
+    return this.ticketsService.bookTicket(eventId, userId);
   }
 
   @UseGuards(JWTAuthGuard)
