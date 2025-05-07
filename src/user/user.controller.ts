@@ -19,6 +19,7 @@ export class UserController {
   @UseGuards(JWTAuthGuard)
   @Get('/profile')
   async get_my_profile(@UserId() id) {
+    console.log(id);
     return this.userService.findUser(id);
   }
 

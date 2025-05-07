@@ -16,11 +16,14 @@ import { Tokens } from './interfaces/jwt-payload.interface';
 import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { GetCurrentUser } from 'src/user/decorators/user.decorator';
+import { JWTAuthGuard } from './guards/jwt.guard';
+import { RolesGuard } from './guards/businessUser.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseGuards(JWTAuthGuard, RolesGuard)
   @Post('/register')
   async register(@Body() user: RegisterDto) {
     console.log('', user);
