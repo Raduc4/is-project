@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateEventDto } from './dtos/createEventDto';
+import { CreateEventDto } from './dtos/createTicketDto';
 import { TicketsRepository } from './repository/tickets.repository';
 import { EventEntity } from './entities/event.entity';
 
@@ -31,7 +31,40 @@ export class TicketsService {
 
   async bookTicket(eventId: string, userId: string) {}
 
-  async createTicket(event: CreateEventDto, authorId: string) {
+  async calculatePrice(data: any) {
+    const { ticketType, quantity, isRoundTrip, isLastMinute, paymentMethod, extras } = data;
+
+    const basePrices = {
+      economy: 100,
+      business: 200,
+      firstClass: 300,
+    };
+
+    let pricePerTicket = basePrices[ticketType] || 0;
+
+    // Adăugăm costul opțiunilor suplimentare
+    if (extras) {
+      if (extras.meal) pricePerTicket *= 1.05;
+      if (extras.extraLuggage) pricePerTicket *= 1.05;
+    }
+    let total = pricePerTicket * quantity;
+
+    if (isRoundTrip) {
+      total *= 0.95; // 5% reducere
+    }
+    if (isLastMinute) {
+      total *= 0.6; // 40% reducere
+    }
+    return {
+      totalPrice: total,
+      currency: 'EUR',
+      paymentMethod: paymentMethod === 'card' ? 'Card' : 'Cash',
+      roundTripDiscountApplied: !!isRoundTrip,
+      lastMinuteDiscountApplied: !!isLastMinute,
+    };
+  }
+  async createTicket(event: CreateTicketDto, authorId: string) {
+    const price = await this.calculatePrice();
     const newEventEntity = new EventEntity({
       title: 'Test',
       price: 10,
