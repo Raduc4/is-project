@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PostsModule } from './tickets/tickets.module';
 import { S3Module } from './s3/s3.module';
 import { PaymentsModule } from './payments/payments.module';
+import { FlightsModule } from './flights/flights.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PaymentsModule } from './payments/payments.module';
     PostsModule,
     S3Module,
     PaymentsModule,
+    FlightsModule,
   ],
   controllers: [],
   providers: [JwtService],

@@ -64,6 +64,39 @@ model User {
   bookedTickets    Ticket[]   @relation("bookedEvents", fields: [bookedIDs], references: [id])
 }
 
+model Flight {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  flightCode  String
+  planeId     String   @db.ObjectId
+  plane       Plane    @relation("flight", fields: planeId, references: [id])
+  departureLocation   String
+  arrivalLocation     String
+  flightType  FlightType
+  departureDate DateTime
+  arrivalDate   DateTime
+}
+
+model Plane {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  classOneSeatsNr Int
+  classOneTariff  Float
+
+  classEconomySeatsNr Int
+  classEconomyTariff  Float
+
+  classBusinessSeatsNr Int
+  classBusinessTariff  Float
+
+  planeModel String
+  Flight     Flight[] @relation("flight")
+}
+
+enum FlightType {
+  REGULAR
+  SEASONAL
+}
+
 enum UserRole {
   USER
   ADMIN
