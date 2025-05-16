@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateEventDto } from './dtos/createTicketDto';
+import { CreateTicketDto } from './dtos/createTicketDto';
 import { TicketsRepository } from './repository/tickets.repository';
-import { EventEntity } from './entities/event.entity';
+import { TicketEntity } from './entities/ticket.entity';
 
 @Injectable()
 export class TicketsService {
@@ -32,7 +32,14 @@ export class TicketsService {
   async bookTicket(eventId: string, userId: string) {}
 
   async calculatePrice(data: any) {
-    const { ticketType, quantity, isRoundTrip, isLastMinute, paymentMethod, extras } = data;
+    const {
+      ticketType,
+      quantity,
+      isRoundTrip,
+      isLastMinute,
+      paymentMethod,
+      extras,
+    } = data;
 
     const basePrices = {
       economy: 100,
@@ -64,8 +71,8 @@ export class TicketsService {
     };
   }
   async createTicket(event: CreateTicketDto, authorId: string) {
-    const price = await this.calculatePrice();
-    const newEventEntity = new EventEntity({
+    // const price = await this.calculatePrice();
+    const newEventEntity = new TicketEntity({
       title: 'Test',
       price: 10,
       location: 'Location',

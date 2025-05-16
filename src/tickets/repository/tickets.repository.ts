@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { EventEntity } from '../entities/event.entity';
+import { TicketEntity } from '../entities/ticket.entity';
 import { ImagesService } from 'src/s3/s3.service';
 import { randomUUID } from 'crypto';
 @Injectable()
@@ -10,7 +10,7 @@ export class TicketsRepository {
     private readonly s3Service: ImagesService,
   ) {}
 
-  async createTicket(event: EventEntity) {
+  async createTicket(event: TicketEntity) {
     const imageUploadPromises = event.images.map(async (image) => {
       const imageObject = await this.s3Service.uploadFile(
         image.base64,

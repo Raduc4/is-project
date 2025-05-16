@@ -1,4 +1,4 @@
-export interface IEvent {
+export interface ITicket {
   _id?: string;
   title: string;
   price: number;

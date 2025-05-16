@@ -1,6 +1,6 @@
-import { IEvent } from '../interfaces/event.interface';
+import { ITicket} from '../interfaces/event.interface';
 
-export class EventEntity implements IEvent {
+export class TicketEntity implements ITicket {
   _id?: string;
   title: string;
   price: number;
@@ -18,7 +18,7 @@ export class EventEntity implements IEvent {
   slotsSplit: 'FULLDAY' | 'HOURLY';
   offerType: 'PERMANENT' | 'PROMO';
 
-  constructor(user: IEvent) {
+  constructor(user: ITicket) {
     const {
       _id,
       title,

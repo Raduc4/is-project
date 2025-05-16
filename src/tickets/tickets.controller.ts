@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
-import { CreateEventDto } from './dtos/createTicketDto';
+import { CreateTicketDto } from './dtos/createTicketDto';
 import { JWTAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/user/decorators/userId.decorator';
 
@@ -40,7 +40,7 @@ export class TicketsController {
 
   @UseGuards(JWTAuthGuard)
   @Post()
-  createTicket(@Body() createEventDto: CreateEventDto, @UserId() id: string) {
+  createTicket(@Body() createEventDto: CreateTicketDto, @UserId() id: string) {
     return this.ticketsService.createTicket(createEventDto, id);
   }
 
@@ -57,7 +57,5 @@ export class TicketsController {
   updateEvent(@Param() id: string, @Body() updatePostDto: any[]) {}
 
   @Put('/calculatePrice')
-  async calculatePrice(@Body() data: any) {
-    
-  }
+  async calculatePrice(@Body() data: any) {}
 }
