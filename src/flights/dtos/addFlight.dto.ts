@@ -5,7 +5,7 @@ export class CreateFlightDto {
   planeId: string;
   departureLocation: string;
   arrivalLocation: string;
-    departureDate: Date;
-    arrivalDate: Date;
-flightType: FlightType;
+  departureDate: Date;
+  arrivalDate: Date;
+  flightType: FlightType;
 }
