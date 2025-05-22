@@ -76,15 +76,11 @@ export class TicketsService {
       title: 'Test',
       price: 10,
       location: 'Location',
-      images: event.images,
       description: event.description,
       authorId: authorId,
       days: event.days,
       hourFrom: event.hourFrom,
       hourTo: event.hourTo,
-      howToSell: event.howToSell,
-      offerType: event.offerType,
-      slotsSplit: event.slotsSplit,
     });
     return await this.ticketRepository.createTicket(newEventEntity);
   }

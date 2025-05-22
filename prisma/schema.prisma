@@ -31,10 +31,9 @@ model Ticket {
   title       String
   price       Float
   location    String
-  images      String[]
   description String
-  hourFrom    String
-  hourTo      String
+  dateFrom    DateTime
+  dateTo      DateTime
   days        String[]
 
   bookedByUsers   User[]   @relation("bookedEvents", fields: [bookedByUserIds], references: [id])
