@@ -10,8 +10,15 @@ export class FlightsService {
   async addFlight(flightDto: CreateFlightDto) {
     const flightEntity = new FlightEntity(flightDto);
     return this.prismaService.flight.create({
-      data: flightEntity,
-    }); 
+      data: {
+        ...flightEntity,
+        flightData: {
+          create: {
+            ...flightEntity.flightData,
+          },
+        },
+      },
+    });
   }
 
   async deleteFlight(id: string) {
@@ -19,4 +26,12 @@ export class FlightsService {
       where: { id },
     });
   }
+
+  // async searchFlight(searchLocations: SearchFlightsDto) {
+  //   const { departureLocation, arrivalLocation } = searchLocations;
+  //   return this.prismaService.flight.findMany({
+  //     where: { title: { contains: title, mode: 'insensitive' } },
+  //     take: 10,
+  //   });
+  // }
 }

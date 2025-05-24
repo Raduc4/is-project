@@ -1,4 +1,4 @@
-import { FlightType } from "@prisma/client";
+import { FlightData, FlightType } from '@prisma/client';
 
 export class CreateFlightDto {
   flightCode: string;
@@ -7,5 +7,6 @@ export class CreateFlightDto {
   arrivalLocation: string;
   departureDate: Date;
   arrivalDate: Date;
-  flightType: FlightType;
+
+  flightData: FlightData;
 }

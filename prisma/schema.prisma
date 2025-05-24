@@ -71,22 +71,28 @@ model Flight {
   plane       Plane    @relation("flight", fields: planeId, references: [id])
   departureLocation   String
   arrivalLocation     String
-  flightType  FlightType
   departureDate DateTime
   arrivalDate   DateTime
+
+  flightData  FlightData?
+  }
+
+model FlightData {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  flightId    String   @db.ObjectId @unique
+  flight      Flight   @relation(fields: [flightId], references: [id])
+  date        DateTime
+  classOneSeatsNr Int
+  classEconomySeatsNr Int
+  classBusinessSeatsNr Int
+  classOneBookedSeats Int
+  classEconomyBookedSeats Int
+  classBusinessBookedSeats Int
+  flightType FlightType
 }
 
 model Plane {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
-  classOneSeatsNr Int
-  classOneTariff  Float
-
-  classEconomySeatsNr Int
-  classEconomyTariff  Float
-
-  classBusinessSeatsNr Int
-  classBusinessTariff  Float
-
   planeModel String
   Flight     Flight[] @relation("flight")
 }
