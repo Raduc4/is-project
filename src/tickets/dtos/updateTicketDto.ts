@@ -1,4 +1,4 @@
-export class UpdateEventDto {
+export class UpdateTicketDto {
   title: string;
   price: number;
   location: string;

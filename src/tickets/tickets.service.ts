@@ -24,47 +24,47 @@ export class TicketsService {
     return await this.prismaService.ticket.findMany({ take: 10 });
   }
 
-  async bookTicket(eventId: string, userId: string) {}
-
-  async calculatePrice(data: any) {
+  async calculatePrice(data: {
+    ticketType: 'economy' | 'business' | 'firstClass';
+    quantity: number;
+    isRoundTrip?: boolean;
+    paymentMethod: 'card' | 'cash' | 'cache';
+    extras?: {
+      meal?: boolean;
+      extraLuggage?: boolean;
+    };
+  }) {
     const {
       ticketType,
       quantity,
-      isRoundTrip,
-      isLastMinute,
+      isRoundTrip = false,
       paymentMethod,
-      extras,
+      extras = {},
     } = data;
 
-    const basePrices = {
+    const basePrices: Record<typeof ticketType, number> = {
       economy: 100,
       business: 200,
       firstClass: 300,
     };
+    const base = basePrices[ticketType];
 
-    let pricePerTicket = basePrices[ticketType] || 0;
+    let pricePerTicket = base;
+    if (extras.meal) pricePerTicket *= 1.05;
+    if (extras.extraLuggage) pricePerTicket *= 1.05;
 
-    // Adăugăm costul opțiunilor suplimentare
-    if (extras) {
-      if (extras.meal) pricePerTicket *= 1.05;
-      if (extras.extraLuggage) pricePerTicket *= 1.05;
-    }
     let total = pricePerTicket * quantity;
 
-    if (isRoundTrip) {
-      total *= 0.95; // 5% reducere
-    }
-    if (isLastMinute) {
-      total *= 0.6; // 40% reducere
-    }
+    if (isRoundTrip) total *= 0.95;
+
     return {
-      totalPrice: total,
+      totalPrice: Math.round(total * 100) / 100,
       currency: 'EUR',
-      paymentMethod: paymentMethod === 'card' ? 'Card' : 'Cash',
-      roundTripDiscountApplied: !!isRoundTrip,
-      lastMinuteDiscountApplied: !!isLastMinute,
+      paymentMethod: paymentMethod.toLowerCase() === 'card' ? 'Card' : 'Cash',
+      roundTripDiscountApplied: isRoundTrip,
     };
   }
+
   async createTicket(dto: CreateTicketDto) {
     return this.prismaService.ticket.create({
       data: {

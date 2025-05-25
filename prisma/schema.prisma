@@ -13,7 +13,7 @@ datasource db {
 model Payments {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   userId       String   @db.ObjectId
-  eventId      String   @db.ObjectId
+  ticketId     String   @db.ObjectId
   ticketAmount Int
   price        Float
   currency     String

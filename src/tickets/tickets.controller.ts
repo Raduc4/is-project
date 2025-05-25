@@ -14,7 +14,7 @@ import { CreateTicketDto } from './dtos/createTicketDto';
 import { JWTAuthGuard } from 'src/auth/guards/jwt.guard';
 import { UserId } from 'src/user/decorators/userId.decorator';
 
-@Controller('events')
+@Controller('tickets')
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
