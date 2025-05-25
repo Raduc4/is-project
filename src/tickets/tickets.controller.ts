@@ -17,22 +17,20 @@ import { UserId } from 'src/user/decorators/userId.decorator';
 @Controller('events')
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
-  @Get('/search')
-  searchTickets(@Query('title') title: string) {
-    if (title.length === 0) return [];
-    return this.ticketsService.searchTicket(title);
-  }
 
+  @UseGuards(JWTAuthGuard)
   @Get('/:id')
   getTicket(@Param() { id }: { id: string }) {
     return this.ticketsService.findTicket(id);
   }
 
+  @UseGuards(JWTAuthGuard)
   @Delete('/:id')
   deleteTicket(@Param() id: string) {
     return this.ticketsService.deleteTicket(id);
   }
 
+  @UseGuards(JWTAuthGuard)
   @Get()
   getTickets() {
     return this.ticketsService.getAllTickets();
@@ -44,17 +42,6 @@ export class TicketsController {
   }
 
   @UseGuards(JWTAuthGuard)
-  @Post('/bookEvent')
-  async bookTicket(
-    @Body() { eventId, userId }: { eventId: string; userId: string },
-  ) {
-    return this.ticketsService.bookTicket(eventId, userId);
-  }
-
-  @UseGuards(JWTAuthGuard)
   @Put('/:id')
-  updateEvent(@Param() id: string, @Body() updatePostDto: any[]) {}
-
-  @Put('/calculatePrice')
-  async calculatePrice(@Body() data: any) {}
+  updateTicket(@Param() id: string, @Body() updatePostDto: any[]) {}
 }
