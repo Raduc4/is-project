@@ -22,8 +22,4 @@ export class UserController {
     return this.userService.findUser(id);
   }
 
-  @Get()
-  async get_all_profiles() {
-    return this.userService.findMany();
-  }
 } 

@@ -75,6 +75,7 @@ model User {
   eventIDs         String[]   @db.ObjectId
   role             UserRole
   payments         Payments[]
+  accessCode        String
   bookedIDs        String[]   @db.ObjectId
 }
 

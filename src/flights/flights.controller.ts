@@ -3,25 +3,22 @@ import {
   Delete,
   Post,
   Body,
-  Query,
   Get,
   Param,
+  Put,
 } from '@nestjs/common';
 import { FlightsService } from './flights.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateFlightDto } from './dtos/addFlight.dto';
+import { SearchFlightDto } from './dtos/searchFlight.dto';
 
 @Controller('flights')
 export class FlightsController {
-  constructor(
-    private readonly flightsService: FlightsService,
-    private readonly prismaService: PrismaService,
-  ) {}
+  constructor(private readonly flightsService: FlightsService) {}
 
   @Get('/search')
-  async searchFlight(@Query('title') title: string) {
-    return 'This flight';
-    // return this.flightsService.searchFlight(title);
+  async searchFlight(@Body() searchDto: SearchFlightDto) {
+    return this.flightsService.searchFlight(searchDto);
   }
 
   @Post('/add')
@@ -32,5 +29,10 @@ export class FlightsController {
   @Delete(':id')
   async deleteFlight(@Param() id: string) {
     return this.flightsService.deleteFlight(id);
+  }
+
+  @Put(':id')
+  async validateCashPayment(@Param() id: string) {
+    return this.flightsService.validateCashPayment(id);
   }
 }
