@@ -36,6 +36,27 @@ export class TicketsController {
     return this.ticketsService.getAllTickets();
   }
 
+  @Get('/price')
+  async calculatePrice(
+    @Query('ticketType') ticketType: 'economy' | 'business' | 'firstClass',
+    @Query('quantity') quantity: number,
+    @Query('isRoundTrip') isRoundTrip: boolean,
+    @Query('paymentMethod') paymentMethod: 'card' | 'cash' | 'cache',
+    @Query('extras')
+    extras: {
+      meal?: boolean;
+      extraLuggage?: boolean;
+    } = {},
+  ) {
+    return this.ticketsService.calculatePrice({
+      ticketType,
+      quantity,
+      isRoundTrip,
+      paymentMethod,
+      extras,
+    });
+  }
+
   @Post()
   createTicket(@Body() createEventDto: CreateTicketDto, @UserId() id: string) {
     return this.ticketsService.createTicket(createEventDto);

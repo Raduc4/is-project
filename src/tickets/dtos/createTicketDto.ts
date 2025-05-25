@@ -6,8 +6,8 @@ export interface CreateTicketDto {
   phone: string;
   outboundFlightId: string;
   seatClass: 'ECONOMY' | 'BUSINESS' | 'FIRST';
-  basePriceCents: number;
-  totalPriceCents: number;
+  basePrice: number;
+  totalPrice: number;
   ticketType: 'ONE_WAY' | 'ROUND_TRIP';
   ticketPurchaseType: 'REGULAR' | 'LAST_MINUTE' | 'ROUND_TRIP';
   location: string;
