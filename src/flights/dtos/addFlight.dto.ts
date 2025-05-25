@@ -3,8 +3,8 @@ import { FlightData, FlightType } from '@prisma/client';
 export class CreateFlightDto {
   flightCode: string;
   planeId: string;
-  departureLocation: string;
-  arrivalLocation: string;
+  departureLocationId: string;
+  arrivalLocationId: string;
   departureDate: Date;
   arrivalDate: Date;
 

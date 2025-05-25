@@ -5,8 +5,8 @@ export class FlightEntity implements IFlight {
   _id?: string;
   flightCode: string;
   planeId: string;
-  departureLocation: string;
-  arrivalLocation: string;
+  departureLocationId: string;
+  arrivalLocationId: string;
   departureDate: Date;
   arrivalDate: Date;
   flightData: {
@@ -26,16 +26,16 @@ export class FlightEntity implements IFlight {
     const {
       flightCode,
       planeId,
-      departureLocation,
-      arrivalLocation,
+      departureLocationId,
+      arrivalLocationId,
       departureDate,
       arrivalDate,
       flightData,
     } = flight;
     this.flightCode = flightCode;
     this.planeId = planeId;
-    this.departureLocation = departureLocation;
-    this.arrivalLocation = arrivalLocation;
+    this.departureLocationId = departureLocationId;
+    this.arrivalLocationId = arrivalLocationId;
     this.departureDate = departureDate;
     this.arrivalDate = arrivalDate;
     this.flightData = flightData;

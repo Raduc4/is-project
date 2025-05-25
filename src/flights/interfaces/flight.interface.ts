@@ -4,8 +4,8 @@ export interface IFlight {
   _id?: string;
   flightCode: string;
   planeId: string;
-  departureLocation: string;
-  arrivalLocation: string;
+  departureLocationId: string;
+  arrivalLocationId: string;
   departureDate: Date;
   arrivalDate: Date;
   flightData: {

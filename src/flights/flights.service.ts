@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateFlightDto } from './dtos/addFlight.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FlightEntity } from './entities/flight.entity';
+import { SearchFlightDto } from './dtos/searchFlight.dto';
+import { Flight } from '@prisma/client';
 
 @Injectable()
 export class FlightsService {
@@ -12,6 +14,8 @@ export class FlightsService {
     return this.prismaService.flight.create({
       data: {
         ...flightEntity,
+        arrivalLocation: flightDto.arrivalLocationId,
+        departureLocation: flightDto.departureLocationId,
         flightData: {
           create: {
             ...flightEntity.flightData,
@@ -27,11 +31,21 @@ export class FlightsService {
     });
   }
 
-  // async searchFlight(searchLocations: SearchFlightsDto) {
-  //   const { departureLocation, arrivalLocation } = searchLocations;
-  //   return this.prismaService.flight.findMany({
-  //     where: { title: { contains: title, mode: 'insensitive' } },
-  //     take: 10,
-  //   });
-  // }
+  async searchFlight(searchLocations: SearchFlightDto): Promise<Flight[]> {
+    const { departureDate, arrivalDate, type, to, from, flightId } =
+      searchLocations;
+    return this.prismaService.flight.findMany({
+      where: {
+        arrivalDate: arrivalDate,
+        departureDate: departureDate,
+        departureLocation: from,
+        arrivalLocation: to,
+        flightData: {
+          flightId: flightId,
+          flightType: type,
+        },
+      },
+      take: 10,
+    });
+  }
 }
