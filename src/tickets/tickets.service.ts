@@ -1,22 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTicketDto } from './dtos/createTicketDto';
-import { TicketsRepository } from './repository/tickets.repository';
-import { TicketEntity } from './entities/ticket.entity';
 
 @Injectable()
 export class TicketsService {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly ticketRepository: TicketsRepository,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findTicket(id: string) {
     return await this.prismaService.ticket.findUnique({ where: { id } });
   }
   async searchTicket(title: string) {
     return this.prismaService.ticket.findMany({
-      where: { title: { contains: title, mode: 'insensitive' } },
+      where: {},
       take: 10,
     });
   }
@@ -70,18 +65,33 @@ export class TicketsService {
       lastMinuteDiscountApplied: !!isLastMinute,
     };
   }
-  async createTicket(event: CreateTicketDto, authorId: string) {
-    // const price = await this.calculatePrice();
-    const newEventEntity = new TicketEntity({
-      title: 'Test',
-      price: 10,
-      location: 'Location',
-      description: event.description,
-      authorId: authorId,
-      days: event.days,
-      hourFrom: event.hourFrom,
-      hourTo: event.hourTo,
+  async createTicket(dto: CreateTicketDto) {
+    return this.prismaService.ticket.create({
+      data: {
+        passengerName: dto.passengerName,
+        phone: dto.phone,
+        outboundFlightId: dto.outboundFlightId,
+        seatClass: dto.seatClass,
+        basePriceCents: dto.basePriceCents,
+        totalPriceCents: dto.totalPriceCents,
+        ticketType: dto.ticketType,
+        ticketPurchaseType: dto.ticketPurchaseType,
+        location: dto.location,
+        description: dto.description,
+        dateFrom: new Date(dto.dateFrom),
+        dateTo: new Date(dto.dateTo),
+
+        adults: dto.adults,
+        children: dto.children,
+        seniors: dto.seniors,
+        withMeal: dto.withMeal,
+        extraBaggage: dto.extraBaggage,
+        optionsFeeCents: dto.optionsFeeCents,
+        discountPercent: dto.discountPercent,
+        currency: dto.currency,
+        returnFlightId: dto.returnFlightId,
+        paymentId: dto.paymentId,
+      },
     });
-    return await this.ticketRepository.createTicket(newEventEntity);
   }
 }

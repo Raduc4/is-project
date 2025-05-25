@@ -19,7 +19,6 @@ export class UserController {
   @UseGuards(JWTAuthGuard)
   @Get('/profile')
   async get_my_profile(@UserId() id) {
-    console.log(id);
     return this.userService.findUser(id);
   }
 
@@ -27,12 +26,4 @@ export class UserController {
   async get_all_profiles() {
     return this.userService.findMany();
   }
-
-  @Get('/mySavedEvents')
-  getSavedEvents(@Query('id') id: string) {
-    console.log(id);
-    return this.userService.getSavedEvents(id);
-  }
-
-  // @UseGuards(JWTAuthGuard, RolesGuard)
 } 

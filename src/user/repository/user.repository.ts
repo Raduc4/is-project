@@ -19,7 +19,6 @@ export class UserRepository {
         phone: user.phone,
         passwordHash: user.passwordHash,
         confirmationCode: Math.floor(Math.random() * 10000),
-        savedTickets: {},
         role: user.role,
       },
     });

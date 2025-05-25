@@ -22,30 +22,46 @@ model Payments {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id])
-  // event       Event    @relation(fields: [eventId], references: [id])
+  Ticket       Ticket[]
 }
 
 model Ticket {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime @default(now())
-  title       String
-  price       Float
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+
+  passengerName String
+  phone         String
+  adults        Int    @default(1)
+  children      Int    @default(0)
+  seniors       Int    @default(0)
+
+  outboundFlightId String @db.ObjectId
+  outboundFlight   Flight @relation("OutboundFlightTickets", fields: [outboundFlightId], references: [id])
+
+  returnFlightId String? @db.ObjectId
+  returnFlight   Flight? @relation("ReturnFlightTickets", fields: [returnFlightId], references: [id])
+
+  seatClass SeatType
+
+  withMeal     Boolean @default(false)
+  extraBaggage Boolean @default(false)
+
+  basePriceCents  Int
+  optionsFeeCents Int    @default(0)
+  discountPercent Int    @default(0) 
+  totalPriceCents Int 
+  currency        String @default("EUR")
+
+  ticketType         TicketType
+  ticketPurchaseType TicketPurchaseType
+
+  paymentId String?   @db.ObjectId
+  payment   Payments? @relation(fields: [paymentId], references: [id])
+
   location    String
   description String
   dateFrom    DateTime
   dateTo      DateTime
-  days        String[]
-  ticketType  TicketType
-  ticketPurchaseType TicketPurchaseType
-
-  bookedByUsers   User[]   @relation("bookedEvents", fields: [bookedByUserIds], references: [id])
-  bookedByUserIds String[] @db.ObjectId
-
-  author   User   @relation("tickets", fields: [authorId], references: [id])
-  authorId String @db.ObjectId
-
-  savedByUserIds String[] @db.ObjectId
-  savedByUsers   User[]   @relation("save", fields: [savedByUserIds], references: [id])
 }
 
 model User {
@@ -56,72 +72,60 @@ model User {
   passwordHash     String?
   avatar           String?
   confirmationCode Int
-  tickets          Ticket[]   @relation("tickets")
   eventIDs         String[]   @db.ObjectId
-  savedTickets     Ticket[]   @relation("save", fields: [eventIDs], references: [id])
   role             UserRole
   payments         Payments[]
   bookedIDs        String[]   @db.ObjectId
-  bookedTickets    Ticket[]   @relation("bookedEvents", fields: [bookedIDs], references: [id])
-}
-
-model Customer {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime @default(now())
-  firstName   String
-  lastName    String
-  email       String   @unique
-  phone       String?  @unique
-  address     String?
-  city        String?
-  country     String?
-  postalCode  String?
 }
 
 model Flight {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime @default(now())
-  flightCode  String
-  planeId     String   @db.ObjectId
-  plane       Plane    @relation("flight", fields: planeId, references: [id])
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt           DateTime @default(now())
+  flightCode          String
+  planeId             String   @db.ObjectId
+  plane               Plane    @relation("flight", fields: planeId, references: [id])
   departureLocationId String   @db.ObjectId
-  departureLocation   GisNode  @relation("DepartureLocation", fields: [departureLocationId], references: [id]) 
+  departureLocation   GisNode  @relation("DepartureLocation", fields: [departureLocationId], references: [id])
 
-  arrivalLocationId   String   @db.ObjectId
-  arrivalLocation     GisNode  @relation("ArrivalLocation", fields: [arrivalLocationId], references: [id])
+  arrivalLocationId String  @db.ObjectId
+  arrivalLocation   GisNode @relation("ArrivalLocation", fields: [arrivalLocationId], references: [id])
+
+  outboundTickets Ticket[] @relation("OutboundFlightTickets")
+  returnTickets   Ticket[] @relation("ReturnFlightTickets")
 
   departureDate DateTime
   arrivalDate   DateTime
 
-  flightData  FlightData?
-  }
+  flightData FlightData?
+}
 
 model FlightData {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  flightId    String   @db.ObjectId @unique
-  flight      Flight   @relation(fields: [flightId], references: [id])
-  date        DateTime
-  classOneSeatsNr Int
-  classEconomySeatsNr Int
-  classBusinessSeatsNr Int
-  classOneBookedSeats Int
-  classEconomyBookedSeats Int
+  id                       String     @id @default(auto()) @map("_id") @db.ObjectId
+  flightId                 String     @unique @db.ObjectId
+  flight                   Flight     @relation(fields: [flightId], references: [id])
+  date                     DateTime
+  classOneSeatsNr          Int
+  classEconomySeatsNr      Int
+  classBusinessSeatsNr     Int
+  classOneBookedSeats      Int
+  classEconomyBookedSeats  Int
   classBusinessBookedSeats Int
-  flightType FlightType
+  flightType               FlightType
 }
 
 model GisNode {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime @default(now())
-  name       String
-  description String?
-  uname String
-  flightId String? @db.ObjectId
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt        DateTime @default(now())
+  name             String
+  description      String?
+  uname            String
+  flightId         String?  @db.ObjectId
   departureFlights Flight[] @relation("DepartureLocation")
-  arrivalFlights   Flight[] @relation("ArrivalLocation") 
+  arrivalFlights   Flight[] @relation("ArrivalLocation")
 }
+
 model Plane {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   planeModel String
   Flight     Flight[] @relation("flight")
 }
@@ -141,7 +145,14 @@ enum TicketPurchaseType {
   LAST_MINUTE
   ROUND_TRIP
 }
+
 enum UserRole {
   USER
   ADMIN
+}
+
+enum SeatType {
+  ECONOMY
+  BUSINESS
+  FIRST
 }

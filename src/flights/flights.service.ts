@@ -14,8 +14,8 @@ export class FlightsService {
     return this.prismaService.flight.create({
       data: {
         ...flightEntity,
-        arrivalLocation: flightDto.arrivalLocationId,
-        departureLocation: flightDto.departureLocationId,
+        arrivalLocationId: flightDto.arrivalLocationId,
+        departureLocationId: flightDto.departureLocationId,
         flightData: {
           create: {
             ...flightEntity.flightData,
@@ -38,8 +38,8 @@ export class FlightsService {
       where: {
         arrivalDate: arrivalDate,
         departureDate: departureDate,
-        departureLocation: from,
-        arrivalLocation: to,
+        departureLocationId: from,
+        arrivalLocationId: to,
         flightData: {
           flightId: flightId,
           flightType: type,

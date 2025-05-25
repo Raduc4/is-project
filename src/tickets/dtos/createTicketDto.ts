@@ -1,22 +1,28 @@
 import { IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateTicketDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  title: string;
-  offerType: 'PERMANENT' | 'PROMO';
-  description: string;
-  hourFrom: string;
+export interface CreateTicketDto {
+  passengerName: string;
+  phone: string;
+  outboundFlightId: string;
+  seatClass: 'ECONOMY' | 'BUSINESS' | 'FIRST';
+  basePriceCents: number;
+  totalPriceCents: number;
+  ticketType: 'ONE_WAY' | 'ROUND_TRIP';
+  ticketPurchaseType: 'REGULAR' | 'LAST_MINUTE' | 'ROUND_TRIP';
   location: string;
-  price: number;
-  hourTo: string;
-  days: Array<string>;
-  howToSell: 'IRELEVANT' | 'BY_HOUR_SLOTS';
-  slotsSplit: 'FULLDAY' | 'HOURLY';
-  authorId: string;
-  images?: Array<{
-    base64: string;
-    type: string;
-  }>;
+  description: string;
+  dateFrom: string | Date; // ISO-8601 or Date
+  dateTo: string | Date;
+  // optional overrides
+  adults?: number;
+  children?: number;
+  seniors?: number;
+  withMeal?: boolean;
+  extraBaggage?: boolean;
+  optionsFeeCents?: number;
+  discountPercent?: number;
+  currency?: string;
+  returnFlightId?: string;
+  paymentId?: string;
 }

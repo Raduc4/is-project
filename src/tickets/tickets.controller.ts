@@ -38,10 +38,9 @@ export class TicketsController {
     return this.ticketsService.getAllTickets();
   }
 
-  @UseGuards(JWTAuthGuard)
   @Post()
   createTicket(@Body() createEventDto: CreateTicketDto, @UserId() id: string) {
-    return this.ticketsService.createTicket(createEventDto, id);
+    return this.ticketsService.createTicket(createEventDto);
   }
 
   @UseGuards(JWTAuthGuard)
