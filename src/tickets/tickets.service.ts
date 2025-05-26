@@ -28,6 +28,7 @@ export class TicketsService {
     ticketType: "economy" | "business" | "firstClass";
     quantity: number;
     isRoundTrip?: boolean;
+    isLastMinute?: boolean;
     paymentMethod: "card" | "cash" | "cache";
     extras?: {
       meal?: boolean;
@@ -38,6 +39,7 @@ export class TicketsService {
       ticketType,
       quantity,
       isRoundTrip = false,
+      isLastMinute = false,
       paymentMethod,
       extras = {},
     } = data;
@@ -56,6 +58,7 @@ export class TicketsService {
     let total = pricePerTicket * quantity;
 
     if (isRoundTrip) total *= 0.95;
+    if (isLastMinute) total *= 0.6;
 
     return {
       totalPrice: Math.round(total * 100) / 100,
@@ -65,21 +68,6 @@ export class TicketsService {
     };
   }
   async createTicket(dto: CreateTicketDto) {
-    let discountPercent = dto.discountPercent;
-
-    if (
-      (!discountPercent || discountPercent == 0) &&
-      dto.ticketType === "ROUND_TRIP"
-    ) {
-      discountPercent = 5;
-    }
-
-    if (
-      (!discountPercent || discountPercent === 0) &&
-      dto.ticketPurchaseType === "LAST_MINUTE"
-    ) {
-      discountPercent = 40;
-    }
     return this.prismaService.ticket.create({
       data: {
         passengerName: dto.passengerName,
@@ -101,7 +89,7 @@ export class TicketsService {
         withMeal: dto.withMeal,
         extraBaggage: dto.extraBaggage,
         optionsFeeCents: dto.optionsFeeCents,
-        discountPercent: discountPercent,
+        discountPercent: dto.discountPercent,
         currency: dto.currency,
         returnFlightId: dto.returnFlightId,
         paymentId: dto.paymentId,
