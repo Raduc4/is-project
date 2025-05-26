@@ -64,5 +64,6 @@ export class TicketsController {
 
   @UseGuards(JWTAuthGuard)
   @Put("/:id")
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   updateTicket(@Param() id: string, @Body() updatePostDto: any[]) {}
 }

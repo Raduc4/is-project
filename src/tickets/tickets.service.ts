@@ -64,8 +64,22 @@ export class TicketsService {
       roundTripDiscountApplied: isRoundTrip,
     };
   }
-
   async createTicket(dto: CreateTicketDto) {
+    let discountPercent = dto.discountPercent;
+
+    if (
+      (!discountPercent || discountPercent == 0) &&
+      dto.ticketType === "ROUND_TRIP"
+    ) {
+      discountPercent = 5;
+    }
+
+    if (
+      (!discountPercent || discountPercent === 0) &&
+      dto.ticketPurchaseType === "LAST_MINUTE"
+    ) {
+      discountPercent = 40;
+    }
     return this.prismaService.ticket.create({
       data: {
         passengerName: dto.passengerName,
@@ -87,7 +101,7 @@ export class TicketsService {
         withMeal: dto.withMeal,
         extraBaggage: dto.extraBaggage,
         optionsFeeCents: dto.optionsFeeCents,
-        discountPercent: dto.discountPercent,
+        discountPercent: discountPercent,
         currency: dto.currency,
         returnFlightId: dto.returnFlightId,
         paymentId: dto.paymentId,
