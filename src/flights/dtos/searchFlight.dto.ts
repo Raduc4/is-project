@@ -1,4 +1,4 @@
-import { FlightType } from '@prisma/client';
+import { FlightType } from "@prisma/client";
 
 export class SearchFlightDto {
   from: string;

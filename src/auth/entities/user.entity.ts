@@ -1,6 +1,6 @@
-import { compare, genSalt, hash } from 'bcryptjs';
-import { IUser } from '../../auth/interfaces/user.interface';
-import { UserRole } from '@prisma/client';
+import { compare, genSalt, hash } from "bcryptjs";
+import { IUser } from "../../auth/interfaces/user.interface";
+import { UserRole } from "@prisma/client";
 
 export class UserEntity implements IUser {
   _id?: string;

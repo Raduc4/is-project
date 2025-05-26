@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client';
+import { UserRole } from "@prisma/client";
 
 export class RegisterDto {
   email: string;
@@ -10,6 +10,6 @@ export class RegisterDto {
 
 export class LoginDto {
   email: string;
-  role: 'USER' | 'ADMIN';
+  role: "USER" | "ADMIN";
   password: string;
 }

@@ -1,17 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import Stripe from 'stripe';
+import { Body, Controller, Post } from "@nestjs/common";
+import Stripe from "stripe";
 
-@Controller('payments')
+@Controller("payments")
 export class PaymentsController {
-  private stripe = new Stripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+  private stripe = new Stripe("sk_test_4eC39HqLyjWDarjtT1zdp7dc");
   constructor() {}
 
-  @Post('/create-setup-intent')
+  @Post("/create-setup-intent")
   async createSetupIntent() {
     const customer = await this.stripe.customers.create();
     const ephemeralKey = await this.stripe.ephemeralKeys.create(
       { customer: customer.id },
-      { apiVersion: '2022-08-01' },
+      { apiVersion: "2022-08-01" }
     );
     const setupIntent = await this.stripe.setupIntents.create({
       customer: customer.id,
@@ -23,7 +23,7 @@ export class PaymentsController {
     };
   }
 
-  @Post('/')
+  @Post("/")
   async createPaymentIntent(@Body() request: any) {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: request.amount,

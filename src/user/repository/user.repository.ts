@@ -1,18 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { UserEntity } from '../../auth/entities/user.entity';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { ConfigService } from '@nestjs/config';
-import { IJwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from "@nestjs/common";
+import { UserEntity } from "../../auth/entities/user.entity";
+import { PrismaService } from "src/prisma/prisma.service";
+import { ConfigService } from "@nestjs/config";
+import { IJwtPayload } from "src/auth/interfaces/jwt-payload.interface";
+import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class UserRepository {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly config: ConfigService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
   public async createUser(user: UserEntity) {
-    console.log('Creating user', user);
+    console.log("Creating user", user);
     const newUser = this.prismaService.user.create({
       data: {
         email: user.email,
@@ -33,7 +33,7 @@ export class UserRepository {
     return updatedUser;
   }
 
-  async getTokens(userId: string, role: 'USER' | 'ADMIN') {
+  async getTokens(userId: string, role: "USER" | "ADMIN") {
     const jwtPayload: IJwtPayload = {
       id: userId,
       role,
@@ -41,12 +41,12 @@ export class UserRepository {
 
     const [at, rt] = await Promise.all([
       this.jwtService.signAsync(jwtPayload, {
-        secret: this.config.get<string>('JWT_SECRET'),
-        expiresIn: '3d',
+        secret: this.config.get<string>("JWT_SECRET"),
+        expiresIn: "3d",
       }),
       this.jwtService.signAsync(jwtPayload, {
-        secret: this.config.get<string>('JWT_SECRET_RT'),
-        expiresIn: '7d',
+        secret: this.config.get<string>("JWT_SECRET_RT"),
+        expiresIn: "7d",
       }),
     ]);
 
@@ -69,7 +69,7 @@ export class UserRepository {
   }
 
   async findOneByPhone(phone: string) {
-    console.log('Find unique', phone);
+    console.log("Find unique", phone);
     return this.prismaService.user.findUnique({ where: { phone } });
   }
 
