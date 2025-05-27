@@ -18,24 +18,6 @@ import { UserId } from "src/user/decorators/userId.decorator";
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @UseGuards(JWTAuthGuard)
-  @Get("/:id")
-  getTicket(@Param() { id }: { id: string }) {
-    return this.ticketsService.findTicket(id);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Delete("/:id")
-  deleteTicket(@Param() id: string) {
-    return this.ticketsService.deleteTicket(id);
-  }
-
-  @UseGuards(JWTAuthGuard)
-  @Get()
-  getTickets() {
-    return this.ticketsService.getAllTickets();
-  }
-
   @Get("/price")
   async calculatePrice(
     @Query("ticketType") ticketType: "economy" | "business" | "firstClass",
@@ -55,6 +37,24 @@ export class TicketsController {
       paymentMethod,
       extras,
     });
+  }
+
+  @UseGuards(JWTAuthGuard)
+  @Get("/:id")
+  getTicket(@Param() { id }: { id: string }) {
+    return this.ticketsService.findTicket(id);
+  }
+
+  @UseGuards(JWTAuthGuard)
+  @Delete("/:id")
+  deleteTicket(@Param() id: string) {
+    return this.ticketsService.deleteTicket(id);
+  }
+
+  @UseGuards(JWTAuthGuard)
+  @Get()
+  getTickets() {
+    return this.ticketsService.getAllTickets();
   }
 
   @Post()
