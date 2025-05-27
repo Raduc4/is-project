@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFlightDto } from './dtos/addFlight.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { FlightEntity } from './entities/flight.entity';
-import { SearchFlightDto } from './dtos/searchFlight.dto';
-import { Flight } from '@prisma/client';
+import { Injectable } from "@nestjs/common";
+import { CreateFlightDto } from "./dtos/addFlight.dto";
+import { PrismaService } from "src/prisma/prisma.service";
+import { FlightEntity } from "./entities/flight.entity";
+import { SearchFlightDto } from "./dtos/searchFlight.dto";
+import { Flight } from "@prisma/client";
 
 @Injectable()
 export class FlightsService {
@@ -33,9 +33,9 @@ export class FlightsService {
 
   validateCashPayment(id: string) {
     return this.prismaService.payments.update({
-      where: { id, paymentType: 'CASH' },
+      where: { id, paymentType: "CASH" },
       data: {
-        status: 'VALIDATED',
+        status: "VALIDATED",
       },
     });
   }

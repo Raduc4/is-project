@@ -8,24 +8,24 @@ import {
   Put,
   Query,
   UseGuards,
-} from '@nestjs/common';
-import { TicketsService } from './tickets.service';
-import { CreateTicketDto } from './dtos/createTicketDto';
-import { JWTAuthGuard } from 'src/auth/guards/jwt.guard';
-import { UserId } from 'src/user/decorators/userId.decorator';
+} from "@nestjs/common";
+import { TicketsService } from "./tickets.service";
+import { CreateTicketDto } from "./dtos/createTicketDto";
+import { JWTAuthGuard } from "src/auth/guards/jwt.guard";
+import { UserId } from "src/user/decorators/userId.decorator";
 
-@Controller('tickets')
+@Controller("tickets")
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
   @UseGuards(JWTAuthGuard)
-  @Get('/:id')
+  @Get("/:id")
   getTicket(@Param() { id }: { id: string }) {
     return this.ticketsService.findTicket(id);
   }
 
   @UseGuards(JWTAuthGuard)
-  @Delete('/:id')
+  @Delete("/:id")
   deleteTicket(@Param() id: string) {
     return this.ticketsService.deleteTicket(id);
   }
@@ -36,17 +36,17 @@ export class TicketsController {
     return this.ticketsService.getAllTickets();
   }
 
-  @Get('/price')
+  @Get("/price")
   async calculatePrice(
-    @Query('ticketType') ticketType: 'economy' | 'business' | 'firstClass',
-    @Query('quantity') quantity: number,
-    @Query('isRoundTrip') isRoundTrip: boolean,
-    @Query('paymentMethod') paymentMethod: 'card' | 'cash' | 'cache',
-    @Query('extras')
+    @Query("ticketType") ticketType: "economy" | "business" | "firstClass",
+    @Query("quantity") quantity: number,
+    @Query("isRoundTrip") isRoundTrip: boolean,
+    @Query("paymentMethod") paymentMethod: "card" | "cash" | "cache",
+    @Query("extras")
     extras: {
       meal?: boolean;
       extraLuggage?: boolean;
-    } = {},
+    } = {}
   ) {
     return this.ticketsService.calculatePrice({
       ticketType,
@@ -63,6 +63,7 @@ export class TicketsController {
   }
 
   @UseGuards(JWTAuthGuard)
-  @Put('/:id')
+  @Put("/:id")
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   updateTicket(@Param() id: string, @Body() updatePostDto: any[]) {}
 }

@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
@@ -28,7 +28,7 @@ export class UserService {
 
     const user = await this.prisma.user.findFirst({
       where: {
-        email: { equals: email, mode: 'insensitive' },
+        email: { equals: email, mode: "insensitive" },
       },
     });
 

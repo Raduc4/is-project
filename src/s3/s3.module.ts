@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { S3Controller } from './s3.controller';
-import { ImagesService } from './s3.service';
+import { Module } from "@nestjs/common";
+import { S3Controller } from "./s3.controller";
+import { ImagesService } from "./s3.service";
 
 @Module({
   imports: [],

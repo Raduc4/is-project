@@ -6,20 +6,19 @@ import {
   Post,
   Query,
   UseGuards,
-} from '@nestjs/common';
-import { UserService } from './user.service';
-import { JWTAuthGuard } from 'src/auth/guards/jwt.guard';
-import { UserId } from './decorators/userId.decorator';
-import { RolesGuard } from 'src/auth/guards/businessUser.guard';
+} from "@nestjs/common";
+import { UserService } from "./user.service";
+import { JWTAuthGuard } from "src/auth/guards/jwt.guard";
+import { UserId } from "./decorators/userId.decorator";
+import { RolesGuard } from "src/auth/guards/businessUser.guard";
 
-@Controller('user')
+@Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(JWTAuthGuard)
-  @Get('/profile')
+  @Get("/profile")
   async get_my_profile(@UserId() id) {
     return this.userService.findUser(id);
   }
-
-} 
+}

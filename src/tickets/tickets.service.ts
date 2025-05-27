@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateTicketDto } from './dtos/createTicketDto';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
+import { CreateTicketDto } from "./dtos/createTicketDto";
 
 @Injectable()
 export class TicketsService {
@@ -25,10 +25,11 @@ export class TicketsService {
   }
 
   async calculatePrice(data: {
-    ticketType: 'economy' | 'business' | 'firstClass';
+    ticketType: "economy" | "business" | "firstClass";
     quantity: number;
     isRoundTrip?: boolean;
-    paymentMethod: 'card' | 'cash' | 'cache';
+    isLastMinute?: boolean;
+    paymentMethod: "card" | "cash" | "cache";
     extras?: {
       meal?: boolean;
       extraLuggage?: boolean;
@@ -38,6 +39,7 @@ export class TicketsService {
       ticketType,
       quantity,
       isRoundTrip = false,
+      isLastMinute = false,
       paymentMethod,
       extras = {},
     } = data;
@@ -56,15 +58,15 @@ export class TicketsService {
     let total = pricePerTicket * quantity;
 
     if (isRoundTrip) total *= 0.95;
+    if (isLastMinute) total *= 0.6;
 
     return {
       totalPrice: Math.round(total * 100) / 100,
-      currency: 'EUR',
-      paymentMethod: paymentMethod.toLowerCase() === 'card' ? 'Card' : 'Cash',
+      currency: "EUR",
+      paymentMethod: paymentMethod.toLowerCase() === "card" ? "Card" : "Cash",
       roundTripDiscountApplied: isRoundTrip,
     };
   }
-
   async createTicket(dto: CreateTicketDto) {
     return this.prismaService.ticket.create({
       data: {

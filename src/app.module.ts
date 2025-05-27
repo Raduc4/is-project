@@ -14,7 +14,7 @@ import { GisNodeModule } from './gis-node/gis-node.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: 'envs/.account.env' }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: "envs/.account.env" }),
     AuthModule,
     UserModule,
     PrismaModule,
@@ -28,4 +28,3 @@ import { GisNodeModule } from './gis-node/gis-node.module';
   providers: [JwtService, GisNodeService],
 })
 export class AppModule {}
-
