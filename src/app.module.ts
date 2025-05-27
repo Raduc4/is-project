@@ -8,6 +8,9 @@ import { PostsModule } from './tickets/tickets.module';
 import { S3Module } from './s3/s3.module';
 import { PaymentsModule } from './payments/payments.module';
 import { FlightsModule } from './flights/flights.module';
+import { GisNodeController } from './gis-node/gis-node.controller';
+import { GisNodeService } from './gis-node/gis-node.service';
+import { GisNodeModule } from './gis-node/gis-node.module';
 
 @Module({
   imports: [
@@ -19,9 +22,10 @@ import { FlightsModule } from './flights/flights.module';
     S3Module,
     PaymentsModule,
     FlightsModule,
+    GisNodeModule,
   ],
-  controllers: [],
-  providers: [JwtService],
+  controllers: [GisNodeController],
+  providers: [JwtService, GisNodeService],
 })
 export class AppModule {}
 
