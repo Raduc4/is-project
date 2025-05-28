@@ -13,30 +13,33 @@ import { TicketsService } from "./tickets.service";
 import { CreateTicketDto } from "./dtos/createTicketDto";
 import { JWTAuthGuard } from "src/auth/guards/jwt.guard";
 import { UserId } from "src/user/decorators/userId.decorator";
-import { Public } from "../auth/guards/publicMetadata";
 
 @Controller("tickets")
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @Public()
-  @Get("/price")
-  async calculatePrice(@Query() query: any) {
+  @Post("/price")
+  async calculatePrice(
+    @Body()
+    body: {
+      ticketType: "economy" | "business" | "firstClass";
+      quantity: number;
+      isRoundTrip: boolean;
+      paymentMethod: "card" | "cash";
+      extras?: {
+        meal?: boolean;
+        extraLuggage?: boolean;
+      };
+    }
+  ) {
     return this.ticketsService.calculatePrice({
-      ticketType: query.ticketType,
-      quantity: Number(query.quantity),
-      isRoundTrip: query.isRoundTrip === 'true',
-      isLastMinute: query.isLastMinute === 'true',
-      paymentMethod: query.paymentMethod,
-      extras: {
-        meal: query.meal === 'true',
-        extraLuggage: query.extraLuggage === 'true',
-      },
+      ...body,
+      extras: body.extras || {},
     });
   }
 
   @UseGuards(JWTAuthGuard)
-  @Get("/:id")  // The parameter route now comes AFTER the specific route
+  @Get("/:id")
   getTicket(@Param() { id }: { id: string }) {
     return this.ticketsService.findTicket(id);
   }
