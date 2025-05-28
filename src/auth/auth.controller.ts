@@ -30,11 +30,6 @@ export class AuthController {
     return await this.authService.register(user);
   }
 
-  @Post("/verifyJwtAws")
-  async verifyAwsJwt(@Query() { jwt }: { jwt: string }) {
-    return await this.authService.verifyAwsJwt(jwt);
-  }
-
   @Post("/login")
   async login(@Body() { email, password }: LoginDto) {
     console.log("login");
@@ -44,11 +39,6 @@ export class AuthController {
 
     return { ...response, tokens };
   }
-
-  // @Get('/forgotPassword')
-  // async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-  //   return await this.authService.forgotPassword(forgotPasswordDto);
-  // }
 
   @Post("/forgotPassword")
   async forgotPasswordSet(
@@ -64,9 +54,10 @@ export class AuthController {
   }
 
   @UseGuards(RtGuard)
-  @Post("refresh")
+  @Post("/refresh")
   @HttpCode(HttpStatus.OK)
   refreshTokens(@UserId() userId: string): Promise<Tokens> {
+    console.log("refreshTokens called with userId:", userId);
     return this.authService.refreshTokens(userId);
   }
 }

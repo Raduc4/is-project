@@ -27,22 +27,6 @@ export class AuthService {
     private readonly s3Service: ImagesService
   ) {}
 
-  async verifyAwsJwt(jwt: string) {
-    const verifier = CognitoJwtVerifier.create({
-      userPoolId: "us-east-1_K7R5lf7B0",
-      tokenUse: "access",
-      clientId: "14p3a3aevea0b69m887mi7ol2u",
-    });
-
-    try {
-      const data = await verifier.verify(jwt);
-      if (data) console.log(data);
-      return data;
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-
   async register(user: RegisterDto) {
     const oldUser = await this.userRepository.findUserByEmail(user.email);
     console.log("Old user", user);
@@ -102,7 +86,6 @@ export class AuthService {
   }
 
   async login(id: string, role: "USER" | "ADMIN") {
-    console.log("Login id", role);
     return this.userRepository.getTokens(id, role);
   }
 
