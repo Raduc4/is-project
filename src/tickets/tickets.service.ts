@@ -49,9 +49,7 @@ export class TicketsService {
       business: 200,
       firstClass: 300,
     };
-    const base = basePrices[ticketType];
-
-    let pricePerTicket = base;
+    let pricePerTicket = basePrices[ticketType];
     if (extras.meal) pricePerTicket *= 1.05;
     if (extras.extraLuggage) pricePerTicket *= 1.05;
 

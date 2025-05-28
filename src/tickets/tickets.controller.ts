@@ -33,8 +33,8 @@ export class TicketsController {
     return this.ticketsService.calculatePrice({
       ticketType,
       quantity,
-      isRoundTrip,
       paymentMethod,
+      isRoundTrip,
       extras,
     });
   }
