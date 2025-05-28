@@ -41,7 +41,10 @@ export class TicketsService {
       isRoundTrip = false,
       isLastMinute = false,
       paymentMethod,
-      extras = {},
+      extras = {
+        meal: false,
+        extraLuggage: false,
+      },
     } = data;
 
     const basePrices: Record<typeof ticketType, number> = {

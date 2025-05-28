@@ -13,13 +13,30 @@ import { TicketsService } from "./tickets.service";
 import { CreateTicketDto } from "./dtos/createTicketDto";
 import { JWTAuthGuard } from "src/auth/guards/jwt.guard";
 import { UserId } from "src/user/decorators/userId.decorator";
+import { Public } from "../auth/guards/publicMetadata";
 
 @Controller("tickets")
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
+  @Public()
+  @Get("/price")
+  async calculatePrice(@Query() query: any) {
+    return this.ticketsService.calculatePrice({
+      ticketType: query.ticketType,
+      quantity: Number(query.quantity),
+      isRoundTrip: query.isRoundTrip === 'true',
+      isLastMinute: query.isLastMinute === 'true',
+      paymentMethod: query.paymentMethod,
+      extras: {
+        meal: query.meal === 'true',
+        extraLuggage: query.extraLuggage === 'true',
+      },
+    });
+  }
+
   @UseGuards(JWTAuthGuard)
-  @Get("/:id")
+  @Get("/:id")  // The parameter route now comes AFTER the specific route
   getTicket(@Param() { id }: { id: string }) {
     return this.ticketsService.findTicket(id);
   }
@@ -34,27 +51,6 @@ export class TicketsController {
   @Get()
   getTickets() {
     return this.ticketsService.getAllTickets();
-  }
-
-  @Get("/price")
-  async calculatePrice(
-    @Query("ticketType") ticketType: "economy" | "business" | "firstClass",
-    @Query("quantity") quantity: number,
-    @Query("isRoundTrip") isRoundTrip: boolean,
-    @Query("paymentMethod") paymentMethod: "card" | "cash" | "cache",
-    @Query("extras")
-    extras: {
-      meal?: boolean;
-      extraLuggage?: boolean;
-    } = {}
-  ) {
-    return this.ticketsService.calculatePrice({
-      ticketType,
-      quantity,
-      isRoundTrip,
-      paymentMethod,
-      extras,
-    });
   }
 
   @Post()
