@@ -18,23 +18,36 @@ import { UserId } from "src/user/decorators/userId.decorator";
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @Post("/price")
-  async calculatePrice(
-    @Body()
-    body: {
-      ticketType: "economy" | "business" | "firstClass";
-      quantity: number;
-      isRoundTrip: boolean;
-      paymentMethod: "card" | "cash";
-      extras?: {
-        meal?: boolean;
-        extraLuggage?: boolean;
-      };
-    }
+  @Get("price/calculate")
+  calculatePrice(
+    @Query("ticketType") ticketType: string,
+    @Query("quantity") quantity: string,
+    @Query("isRoundTrip") isRoundTrip: string,
+    @Query("isLastMinute") isLastMinute: string,
+    @Query("paymentMethod") paymentMethod: string,
+    @Query("meal") meal: string,
+    @Query("extraLuggage") extraLuggage: string
   ) {
+    console.log("Raw query params:", {
+      ticketType,
+      quantity,
+      isRoundTrip,
+      isLastMinute,
+      paymentMethod,
+      meal,
+      extraLuggage,
+    });
+
     return this.ticketsService.calculatePrice({
-      ...body,
-      extras: body.extras || {},
+      ticketType: ticketType as "economy" | "business" | "firstClass",
+      quantity: parseInt(quantity, 10),
+      isRoundTrip: isRoundTrip === "true",
+      isLastMinute: isLastMinute === "true",
+      paymentMethod: paymentMethod as "card" | "cash" | "cache",
+      extras: {
+        meal: meal === "true",
+        extraLuggage: extraLuggage === "true",
+      },
     });
   }
 

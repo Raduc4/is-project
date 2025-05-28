@@ -29,42 +29,97 @@ export class TicketsService {
     quantity: number;
     isRoundTrip?: boolean;
     isLastMinute?: boolean;
-    paymentMethod: "card" | "cash" | "cache";
+    paymentMethod?: "card" | "cash" | "cache";
     extras?: {
       meal?: boolean;
       extraLuggage?: boolean;
     };
   }) {
+    console.log("Received data:", data); // Debug incoming data
+
     const {
       ticketType,
       quantity,
       isRoundTrip = false,
       isLastMinute = false,
-      paymentMethod,
+      paymentMethod = "card",
       extras = {
         meal: false,
         extraLuggage: false,
       },
     } = data;
 
-    const basePrices: Record<typeof ticketType, number> = {
+    console.log("Processing with:", {
+      ticketType,
+      quantity: Number(quantity),
+      isRoundTrip,
+      isLastMinute,
+      paymentMethod,
+    }); // Debug processed data
+
+    // Ensure quantity is a number
+    const quantityNum = Number(quantity);
+
+    if (isNaN(quantityNum)) {
+      console.error("Invalid quantity:", quantity);
+      return {
+        totalPrice: null,
+        currency: "EUR",
+        paymentMethod:
+          paymentMethod && paymentMethod.toLowerCase() === "card"
+            ? "Card"
+            : "Cash",
+        roundTripDiscountApplied: isRoundTrip,
+        error: "Invalid quantity",
+      };
+    }
+
+    const basePrices: Record<string, number> = {
       economy: 100,
       business: 200,
       firstClass: 300,
     };
-    let pricePerTicket = basePrices[ticketType];
-    if (extras.meal) pricePerTicket *= 1.05;
-    if (extras.extraLuggage) pricePerTicket *= 1.05;
 
-    let total = pricePerTicket * quantity;
+    // Check if ticketType is valid
+    if (!basePrices[ticketType]) {
+      console.error("Invalid ticketType:", ticketType);
+      return {
+        totalPrice: null,
+        currency: "EUR",
+        paymentMethod:
+          paymentMethod && paymentMethod.toLowerCase() === "card"
+            ? "Card"
+            : "Cash",
+        roundTripDiscountApplied: isRoundTrip,
+        error: "Invalid ticket type",
+      };
+    }
+
+    let pricePerTicket = basePrices[ticketType];
+
+    // Ensure extras are correctly handled
+    const mealSelected = extras && extras.meal === true;
+    const extraLuggageSelected = extras && extras.extraLuggage === true;
+
+    if (mealSelected) pricePerTicket *= 1.05;
+    if (extraLuggageSelected) pricePerTicket *= 1.05;
+
+    console.log("Price per ticket:", pricePerTicket); // Debug price per ticket
+
+    let total = pricePerTicket * quantityNum;
 
     if (isRoundTrip) total *= 0.95;
     if (isLastMinute) total *= 0.6;
 
+    console.log("Total before rounding:", total); // Debug total
+
+    const paymentDisplay =
+      paymentMethod && paymentMethod.toLowerCase() === "card" ? "Card" : "Cash";
+
     return {
       totalPrice: Math.round(total * 100) / 100,
       currency: "EUR",
-      paymentMethod: paymentMethod.toLowerCase() === "card" ? "Card" : "Cash",
+      paymentMethod: paymentDisplay,
       roundTripDiscountApplied: isRoundTrip,
     };
   }
