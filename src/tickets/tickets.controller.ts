@@ -18,24 +18,23 @@ import { UserId } from "src/user/decorators/userId.decorator";
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @Get("/price")
+  @Post("/price")
   async calculatePrice(
-    @Query("ticketType") ticketType: "economy" | "business" | "firstClass",
-    @Query("quantity") quantity: number,
-    @Query("isRoundTrip") isRoundTrip: boolean,
-    @Query("paymentMethod") paymentMethod: "card" | "cash" | "cache",
-    @Query("extras")
-    extras: {
-      meal?: boolean;
-      extraLuggage?: boolean;
-    } = {}
+    @Body()
+    body: {
+      ticketType: "economy" | "business" | "firstClass";
+      quantity: number;
+      isRoundTrip: boolean;
+      paymentMethod: "card" | "cash";
+      extras?: {
+        meal?: boolean;
+        extraLuggage?: boolean;
+      };
+    }
   ) {
     return this.ticketsService.calculatePrice({
-      ticketType,
-      quantity,
-      paymentMethod,
-      isRoundTrip,
-      extras,
+      ...body,
+      extras: body.extras || {},
     });
   }
 
