@@ -51,6 +51,11 @@ model Ticket {
   discountPercent Int    @default(0) 
   totalPriceCents Int 
   currency        String @default("EUR")
+  paid           Boolean @default(false)
+  paymentStatus  String @default("PENDING")
+  paymentMethod  String @default("CREDIT_CARD")
+  paymentDate   DateTime?
+  paymentStatusUpdatedAt DateTime? @updatedAt
 
   ticketType         TicketType
   ticketPurchaseType TicketPurchaseType
@@ -102,7 +107,7 @@ model Flight {
 model FlightData {
   id                       String     @id @default(auto()) @map("_id") @db.ObjectId
   flightId                 String     @unique @db.ObjectId
-  flight                   Flight     @relation(fields: [flightId], references: [id])
+  flight                   Flight     @relation(fields: [flightId], references: [id], onDelete: Cascade)
   classOneSeatsNr          Int
   classEconomySeatsNr      Int
   classBusinessSeatsNr     Int

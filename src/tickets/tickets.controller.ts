@@ -13,6 +13,7 @@ import { TicketsService } from "./tickets.service";
 import { CreateTicketDto } from "./dtos/createTicketDto";
 import { JWTAuthGuard } from "src/auth/guards/jwt.guard";
 import { UserId } from "src/user/decorators/userId.decorator";
+import { Ticket } from "@prisma/client";
 
 @Controller("tickets")
 export class TicketsController {
@@ -65,7 +66,7 @@ export class TicketsController {
 
   @UseGuards(JWTAuthGuard)
   @Get()
-  getTickets() {
+  getTickets(): Promise<Ticket[]> {
     return this.ticketsService.getAllTickets();
   }
 

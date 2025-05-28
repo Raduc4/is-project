@@ -28,12 +28,13 @@ export class FlightsController {
     return this.flightsService.addFlight(createFlightBody);
   }
 
-  @Delete(":id")
-  async deleteFlight(@Param() id: string) {
+  @Delete("/:id")
+  async deleteFlight(@Param() { id }: { id: string }) {
+    console.log("Deleting flight with ID:", id);
     return this.flightsService.deleteFlight(id);
   }
 
-  @Put(":id")
+  @Put("/:id")
   async validateCashPayment(@Param() id: string) {
     return this.flightsService.validateCashPayment(id);
   }
