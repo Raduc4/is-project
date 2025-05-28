@@ -23,6 +23,12 @@ export class FlightsController {
   }
 
   @UseGuards(JWTAuthGuard)
+  @Get("/all")
+  async getAllFlights() {
+    return this.flightsService.getAllFlights();
+  }
+
+  @UseGuards(JWTAuthGuard)
   @Post("/add")
   async addFlight(@Body() createFlightBody: CreateFlightDto) {
     return this.flightsService.addFlight(createFlightBody);

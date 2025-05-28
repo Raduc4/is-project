@@ -10,6 +10,16 @@ import { startOfDay, addDays } from "date-fns";
 export class FlightsService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async getAllFlights() {
+    return this.prismaService.flight.findMany({
+      include: {
+        flightData: true,
+        departureLocation: true,
+        arrivalLocation: true,
+      },
+    });
+  }
+
   async addFlight(flightDto: CreateFlightDto) {
     const flightEntity = new FlightEntity(flightDto);
     return this.prismaService.flight.create({
