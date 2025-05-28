@@ -4,6 +4,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { FlightEntity } from "./entities/flight.entity";
 import { SearchFlightDto } from "./dtos/searchFlight.dto";
 import { Flight } from "@prisma/client";
+import { startOfDay, addDays } from "date-fns";
 
 @Injectable()
 export class FlightsService {
@@ -40,17 +41,21 @@ export class FlightsService {
     });
   }
 
-  async searchFlight(searchLocations: SearchFlightDto): Promise<Flight[]> {
-    const { departureDate, arrivalDate, type, to, from } = searchLocations;
+  async searchFlight(search: SearchFlightDto): Promise<Flight[]> {
+    const { departureDate, to, from } = search;
+
+    // build 00:00 and 00:00(next day) for each date
+    const depStart = startOfDay(new Date(departureDate));
+    const depEnd = addDays(depStart, 1); // 24 h later
+    // const arrStart = startOfDay(new Date(arrivalDate));
+    // const arrEnd = addDays(arrStart, 1);
+
     return this.prismaService.flight.findMany({
       where: {
-        arrivalDate: arrivalDate,
-        departureDate: departureDate,
         departureLocationId: from,
         arrivalLocationId: to,
-        flightData: {
-          flightType: type,
-        },
+        departureDate: { gte: depStart, lt: depEnd },
+        // arrivalDate: { gte: arrStart, lt: arrEnd },
       },
       take: 10,
     });

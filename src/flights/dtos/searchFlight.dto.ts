@@ -8,9 +8,8 @@ export class SearchFlightDto {
   @IsNotEmpty()
   @IsString()
   to: string;
-  type: FlightType;
   @IsNotEmpty()
   departureDate: Date;
-  @IsNotEmpty()
-  arrivalDate: Date;
+  // @IsNotEmpty()
+  // arrivalDate: Date;
 }

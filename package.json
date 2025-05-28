@@ -33,6 +33,7 @@
     "aws-sdk": "^2.1440.0",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.14.0",
+    "date-fns": "^4.1.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "react-native-timer-picker": "^1.5.1",
