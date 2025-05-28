@@ -12,7 +12,6 @@ export class FlightEntity implements IFlight {
   flightData: {
     id: string;
     flightId: string;
-    date: Date;
     classOneSeatsNr: number;
     classEconomySeatsNr: number;
     classBusinessSeatsNr: number;
@@ -24,7 +23,6 @@ export class FlightEntity implements IFlight {
 
   constructor(flight: IFlight) {
     const {
-      flightCode,
       planeId,
       departureLocationId,
       arrivalLocationId,
@@ -32,12 +30,22 @@ export class FlightEntity implements IFlight {
       arrivalDate,
       flightData,
     } = flight;
-    this.flightCode = flightCode;
+    this.flightCode = this.generateFlightCode();
     this.planeId = planeId;
     this.departureLocationId = departureLocationId;
     this.arrivalLocationId = arrivalLocationId;
     this.departureDate = departureDate;
     this.arrivalDate = arrivalDate;
-    this.flightData = flightData;
+    this.flightData = {
+      ...flightData,
+      classBusinessBookedSeats: 0,
+      classEconomyBookedSeats: 0,
+      classOneBookedSeats: 0,
+    };
+  }
+
+  generateFlightCode(): string {
+    const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+    return `FL-${randomCode}`;
   }
 }

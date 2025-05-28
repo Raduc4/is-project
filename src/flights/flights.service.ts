@@ -41,8 +41,7 @@ export class FlightsService {
   }
 
   async searchFlight(searchLocations: SearchFlightDto): Promise<Flight[]> {
-    const { departureDate, arrivalDate, type, to, from, flightId } =
-      searchLocations;
+    const { departureDate, arrivalDate, type, to, from } = searchLocations;
     return this.prismaService.flight.findMany({
       where: {
         arrivalDate: arrivalDate,
@@ -50,7 +49,6 @@ export class FlightsService {
         departureLocationId: from,
         arrivalLocationId: to,
         flightData: {
-          flightId: flightId,
           flightType: type,
         },
       },

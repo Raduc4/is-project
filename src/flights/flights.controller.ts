@@ -8,7 +8,6 @@ import {
   Put,
 } from "@nestjs/common";
 import { FlightsService } from "./flights.service";
-import { PrismaService } from "../prisma/prisma.service";
 import { CreateFlightDto } from "./dtos/addFlight.dto";
 import { SearchFlightDto } from "./dtos/searchFlight.dto";
 

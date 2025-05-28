@@ -11,6 +11,8 @@ import { FlightsModule } from './flights/flights.module';
 import { GisNodeController } from './gis-node/gis-node.controller';
 import { GisNodeService } from './gis-node/gis-node.service';
 import { GisNodeModule } from './gis-node/gis-node.module';
+import { PlanesController } from "./planes/planes.controller";
+import { PlanesModule } from "./planes/planes.module";
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { GisNodeModule } from './gis-node/gis-node.module';
     PaymentsModule,
     FlightsModule,
     GisNodeModule,
+    PlanesModule,
   ],
   controllers: [GisNodeController],
   providers: [JwtService, GisNodeService],

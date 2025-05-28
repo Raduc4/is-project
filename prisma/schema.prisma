@@ -103,7 +103,6 @@ model FlightData {
   id                       String     @id @default(auto()) @map("_id") @db.ObjectId
   flightId                 String     @unique @db.ObjectId
   flight                   Flight     @relation(fields: [flightId], references: [id])
-  date                     DateTime
   classOneSeatsNr          Int
   classEconomySeatsNr      Int
   classBusinessSeatsNr     Int
@@ -117,9 +116,7 @@ model GisNode {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt        DateTime @default(now())
   name             String
-  description      String?
   uname            String
-  flightId         String?  @db.ObjectId
   departureFlights Flight[] @relation("DepartureLocation")
   arrivalFlights   Flight[] @relation("ArrivalLocation")
 }
