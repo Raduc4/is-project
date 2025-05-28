@@ -6,10 +6,12 @@ import {
   Get,
   Param,
   Put,
+  UseGuards,
 } from "@nestjs/common";
 import { FlightsService } from "./flights.service";
 import { CreateFlightDto } from "./dtos/addFlight.dto";
 import { SearchFlightDto } from "./dtos/searchFlight.dto";
+import { JWTAuthGuard } from "src/auth/guards/jwt.guard";
 
 @Controller("flights")
 export class FlightsController {
@@ -20,6 +22,7 @@ export class FlightsController {
     return this.flightsService.searchFlight(searchDto);
   }
 
+  @UseGuards(JWTAuthGuard)
   @Post("/add")
   async addFlight(@Body() createFlightBody: CreateFlightDto) {
     return this.flightsService.addFlight(createFlightBody);

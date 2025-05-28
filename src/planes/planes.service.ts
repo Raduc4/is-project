@@ -7,12 +7,17 @@ export class PlanesService {
   constructor(private readonly prismaService: PrismaService) {}
   generatePlaneCode(): string {
     const randomCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return `P-${randomCode}`;
+    return `${randomCode}`;
   }
 
   async find(planeCode: string) {
-    return this.prismaService.plane.findFirst({
-      where: { planeCode: { contains: planeCode } },
+    return this.prismaService.plane.findMany({
+      where: {
+        planeCode: {
+          startsWith: planeCode,
+          mode: "insensitive",
+        },
+      },
     });
   }
 
