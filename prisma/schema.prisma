@@ -124,6 +124,7 @@ model GisNode {
 model Plane {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   planeModel String
+  planeCode String
   Flight     Flight[] @relation("flight")
 }
 
