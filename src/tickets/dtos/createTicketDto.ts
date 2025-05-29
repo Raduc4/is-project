@@ -10,8 +10,7 @@ export interface CreateTicketDto {
   totalPrice: number;
   ticketType: "ONE_WAY" | "ROUND_TRIP";
   ticketPurchaseType: "REGULAR" | "LAST_MINUTE" | "ROUND_TRIP";
-  location: string;
-  description: string;
+
   dateFrom: string | Date; // ISO-8601 or Date
   dateTo: string | Date;
   // optional overrides

@@ -40,9 +40,4 @@ export class FlightsController {
     console.log("Deleting flight with ID:", id);
     return this.flightsService.deleteFlight(id);
   }
-
-  @Put("/:id")
-  async validateCashPayment(@Param() id: string) {
-    return this.flightsService.validateCashPayment(id);
-  }
 }

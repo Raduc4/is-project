@@ -134,8 +134,6 @@ export class TicketsService {
         totalPriceCents: dto.totalPrice,
         ticketType: dto.ticketType,
         ticketPurchaseType: dto.ticketPurchaseType,
-        location: dto.location,
-        description: dto.description,
         dateFrom: new Date(dto.dateFrom),
         dateTo: new Date(dto.dateTo),
 

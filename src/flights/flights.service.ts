@@ -42,14 +42,6 @@ export class FlightsService {
     });
   }
 
-  validateCashPayment(id: string) {
-    return this.prismaService.payments.update({
-      where: { id, paymentType: "CASH" },
-      data: {
-        status: "VALIDATED",
-      },
-    });
-  }
 
   async searchFlight(search: SearchFlightDto): Promise<Flight[]> {
     const { departureDate, to, from } = search;

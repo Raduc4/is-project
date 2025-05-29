@@ -48,8 +48,6 @@ model Ticket {
 
   paymentId String?   @db.ObjectId
 
-  location    String
-  description String
   dateFrom    DateTime
   dateTo      DateTime
 }
@@ -110,8 +108,8 @@ model FlightData {
 model GisNode {
   id               String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt        DateTime @default(now())
-  name             String
-  uname            String
+  name             String @unique
+  uname            String @unique
   departureFlights Flight[] @relation("DepartureLocation")
   arrivalFlights   Flight[] @relation("ArrivalLocation")
 }
