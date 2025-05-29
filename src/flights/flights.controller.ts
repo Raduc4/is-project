@@ -7,6 +7,7 @@ import {
   Param,
   Put,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { FlightsService } from "./flights.service";
 import { CreateFlightDto } from "./dtos/addFlight.dto";
@@ -18,7 +19,7 @@ export class FlightsController {
   constructor(private readonly flightsService: FlightsService) {}
 
   @Get("/search")
-  async searchFlight(@Param() searchDto: SearchFlightDto) {
+  async searchFlight(@Query() searchDto: SearchFlightDto) {
     return this.flightsService.searchFlight(searchDto);
   }
 
