@@ -16,6 +16,7 @@ export class FlightsService {
         flightData: true,
         departureLocation: true,
         arrivalLocation: true,
+        plane: true,
       },
     });
   }
