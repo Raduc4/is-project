@@ -71,7 +71,7 @@ export class TicketsController {
   }
 
   @Post()
-  createTicket(@Body() createEventDto: CreateTicketDto, @UserId() id: string) {
+  createTicket(@Body() createEventDto: CreateTicketDto) {
     return this.ticketsService.createTicket(createEventDto);
   }
 
