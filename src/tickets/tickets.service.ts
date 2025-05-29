@@ -130,13 +130,11 @@ export class TicketsService {
         phone: dto.phone,
         outboundFlightId: dto.outboundFlightId,
         seatClass: dto.seatClass,
-        basePriceCents: dto.basePrice,
         totalPriceCents: dto.totalPrice,
         ticketType: dto.ticketType,
         ticketPurchaseType: dto.ticketPurchaseType,
         dateFrom: new Date(dto.dateFrom),
         dateTo: new Date(dto.dateTo),
-
         adults: dto.adults,
         children: dto.children,
         seniors: dto.seniors,

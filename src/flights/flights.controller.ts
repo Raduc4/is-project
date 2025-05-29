@@ -37,7 +37,6 @@ export class FlightsController {
 
   @Delete("/:id")
   async deleteFlight(@Param() { id }: { id: string }) {
-    console.log("Deleting flight with ID:", id);
     return this.flightsService.deleteFlight(id);
   }
 }

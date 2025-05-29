@@ -22,7 +22,7 @@ model Ticket {
   seniors       Int    @default(0)
 
   outboundFlightId String @db.ObjectId
-  outboundFlight   Flight @relation("OutboundFlightTickets", fields: [outboundFlightId], references: [id])
+  outboundFlight   Flight @relation("OutboundFlightTickets", fields: [outboundFlightId], references: [id], onDelete: Cascade)
 
   returnFlightId String? @db.ObjectId
   returnFlight   Flight? @relation("ReturnFlightTickets", fields: [returnFlightId], references: [id])
@@ -32,7 +32,6 @@ model Ticket {
   withMeal     Boolean @default(false)
   extraBaggage Boolean @default(false)
 
-  basePriceCents  Int
   optionsFeeCents Int    @default(0)
   discountPercent Int    @default(0) 
   totalPriceCents Int 
@@ -87,7 +86,7 @@ model Flight {
   returnTickets   Ticket[] @relation("ReturnFlightTickets")
 
   departureDate DateTime
-  arrivalDate   DateTime
+    arrivalDate   DateTime
 
   flightData FlightData?
 }
