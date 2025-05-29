@@ -8,8 +8,8 @@ export class CreateFlightDto {
   arrivalDate: Date;
 
   //if regular days are provided, the flight is considered regular
-  regularDays?: Weekday[];
-  regularTime?: string;
+  regularDays: Weekday[];
+  regularTime: string;
 
   seasonStart?: Date;
   seasonEnd?: Date;

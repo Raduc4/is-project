@@ -1,4 +1,4 @@
-import { FlightType } from "@prisma/client";
+import { FlightType, Weekday } from "@prisma/client";
 import { IFlight } from "../interfaces/flight.interface";
 
 export class FlightEntity implements IFlight {
@@ -9,6 +9,13 @@ export class FlightEntity implements IFlight {
   arrivalLocationId: string;
   departureDate: Date;
   arrivalDate: Date;
+
+  regularDays: Weekday[];
+  regularTime: string; // ISO 8601 time format
+
+  seasonStart?: Date;
+  seasonEnd?: Date;
+
   flightData: {
     id: string;
     flightId: string;
@@ -29,6 +36,10 @@ export class FlightEntity implements IFlight {
       departureDate,
       arrivalDate,
       flightData,
+      seasonStart,
+      seasonEnd,
+      regularDays,
+      regularTime,
     } = flight;
     this.flightCode = this.generateFlightCode();
     this.planeId = planeId;
@@ -36,6 +47,10 @@ export class FlightEntity implements IFlight {
     this.arrivalLocationId = arrivalLocationId;
     this.departureDate = departureDate;
     this.arrivalDate = arrivalDate;
+    this.seasonEnd = seasonEnd;
+    this.seasonStart = seasonStart;
+    this.regularDays = regularDays;
+    this.regularTime = regularTime;
     this.flightData = {
       ...flightData,
       classBusinessBookedSeats: 0,

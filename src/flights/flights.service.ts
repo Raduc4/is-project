@@ -54,7 +54,6 @@ export class FlightsService {
   async searchFlight(search: SearchFlightDto): Promise<Flight[]> {
     const { departureDate, to, from } = search;
 
-    // build 00:00 and 00:00(next day) for each date
     const depStart = startOfDay(new Date(departureDate));
     const depEnd = addDays(depStart, 1); // 24 h later
     // const arrStart = startOfDay(new Date(arrivalDate));

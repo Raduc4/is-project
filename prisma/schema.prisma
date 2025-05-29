@@ -10,20 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Payments {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String   @db.ObjectId
-  ticketId     String   @db.ObjectId
-  ticketAmount Int
-  price        Float
-  currency     String
-  paymentType  String
-  status       String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  user         User     @relation(fields: [userId], references: [id])
-  Ticket       Ticket[]
-}
 
 model Ticket {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -61,7 +47,6 @@ model Ticket {
   ticketPurchaseType TicketPurchaseType
 
   paymentId String?   @db.ObjectId
-  payment   Payments? @relation(fields: [paymentId], references: [id])
 
   location    String
   description String
@@ -79,7 +64,6 @@ model User {
   confirmationCode Int
   eventIDs         String[]   @db.ObjectId
   role             UserRole
-  payments         Payments[]
   bookedIDs        String[]   @db.ObjectId
 }
 
