@@ -91,6 +91,12 @@ model Flight {
   plane               Plane    @relation("flight", fields: planeId, references: [id])
   departureLocationId String   @db.ObjectId
   departureLocation   GisNode  @relation("DepartureLocation", fields: [departureLocationId], references: [id])
+  
+  regularDays         Weekday[]   
+  regularTime         String? 
+
+  seasonStart         DateTime?   
+  seasonEnd           DateTime?   
 
   arrivalLocationId String  @db.ObjectId
   arrivalLocation   GisNode @relation("ArrivalLocation", fields: [arrivalLocationId], references: [id])
@@ -158,4 +164,14 @@ enum SeatType {
   ECONOMY
   BUSINESS
   FIRST
+}
+
+enum Weekday {
+  MON
+  TUE
+  WED
+  THU
+  FRI
+  SAT
+  SUN
 }

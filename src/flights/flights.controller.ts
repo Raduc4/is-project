@@ -18,7 +18,7 @@ export class FlightsController {
   constructor(private readonly flightsService: FlightsService) {}
 
   @Get("/search")
-  async searchFlight(@Body() searchDto: SearchFlightDto) {
+  async searchFlight(@Param() searchDto: SearchFlightDto) {
     return this.flightsService.searchFlight(searchDto);
   }
 
