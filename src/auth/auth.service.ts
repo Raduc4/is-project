@@ -11,10 +11,7 @@ import { UserRepository } from "../user/repository/user.repository";
 import { PrismaService } from "src/prisma/prisma.service";
 import { RegisterDto } from "./dto/auth.dto";
 import { Tokens } from "./interfaces/jwt-payload.interface";
-import { ForgotPasswordDto } from "./dto/forgotPassword.dto";
 import { ResetPasswordDto } from "./dto/resetPassword.dto";
-import { CognitoJwtVerifier } from "aws-jwt-verify";
-import { ImagesService } from "src/s3/s3.service";
 
 @Injectable()
 export class AuthService {
@@ -23,8 +20,7 @@ export class AuthService {
     readonly userService: UserService,
     readonly prismaService: PrismaService,
     // private readonly codeService: CodeService,
-    private readonly userRepository: UserRepository,
-    private readonly s3Service: ImagesService
+    private readonly userRepository: UserRepository
   ) {}
 
   async register(user: RegisterDto) {

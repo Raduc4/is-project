@@ -8,7 +8,6 @@ import { UserModule } from "src/user/user.module";
 import { UserRepository } from "src/user/repository/user.repository";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { RtStrategy } from "./strategies/refreshtToken.strategy";
-import { ImagesService } from "src/s3/s3.service";
 
 @Module({
   controllers: [AuthController],
@@ -17,13 +16,6 @@ import { ImagesService } from "src/s3/s3.service";
     JwtModule.registerAsync(getAtJWTConfig()),
     JwtModule.registerAsync(getRtJWTConfig()),
   ],
-  providers: [
-    AuthService,
-    UserService,
-    ImagesService,
-    UserRepository,
-    JwtStrategy,
-    RtStrategy,
-  ],
+  providers: [AuthService, UserService, JwtStrategy, RtStrategy],
 })
 export class AuthModule {}
