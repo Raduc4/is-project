@@ -62,8 +62,12 @@ export class FlightsService {
 
     return this.prismaService.flight.findMany({
       where: {
-        departureLocationId: from,
-        arrivalLocationId: to,
+        departureLocation: {
+          name: from,
+        },
+        arrivalLocation: {
+          name: to,
+        },
         departureDate: { gte: depStart, lt: depEnd },
         // arrivalDate: { gte: arrStart, lt: arrEnd },
       },
