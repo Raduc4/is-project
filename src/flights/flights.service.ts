@@ -61,6 +61,11 @@ export class FlightsService {
     // const arrEnd = addDays(arrStart, 1);
 
     return this.prismaService.flight.findMany({
+      include: {
+        flightData: true,
+        departureLocation: true,
+        arrivalLocation: true,
+      },
       where: {
         departureLocation: {
           name: from,
