@@ -5,7 +5,6 @@ import { Flight } from "@prisma/client";
 import { CreateFlightDto } from "./dtos/addFlight.dto";
 import { SearchFlightDto } from "./dtos/searchFlight.dto";
 import { startOfDay, addDays } from "date-fns";
-import { FlightEntity } from "./entities/flight.entity";
 
 describe("FlightsService", () => {
   let service: FlightsService;
